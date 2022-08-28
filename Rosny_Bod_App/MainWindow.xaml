@@ -1,0 +1,614 @@
+﻿<Window x:Class="Rosny_Bod_App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Closing="Window_Closing"
+        SizeChanged="Window_SizeChanged"
+        mc:Ignorable="d"
+        Title="Rosny bod" Height="600" Width="800" d:DesignWidth="800" MaxWidth="2000" MaxHeight="1200" Icon="Rosnybod.ico" WindowStyle="None" AllowsTransparency="True" ResizeMode="CanResize">
+    <Window.Background>
+        <SolidColorBrush Color="Transparent"></SolidColorBrush>
+    </Window.Background>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="10"/>
+    </WindowChrome.WindowChrome>
+    <Border BorderBrush="Black" Background="White" BorderThickness="1" CornerRadius="20">
+
+        <Grid Background="Transparent">
+
+
+
+            <StackPanel>
+                <Grid Margin="0 2 2 0" Height="25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Rectangle x:Name="Dragfield" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Fill="Transparent" MouseDown="Window_MouseDown" />
+                    <Image Source="/img/Exit_default.png" Grid.Column="4" Grid.Row="0" Name="Exit_button"  VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="Visible" MouseEnter="Exit_button_MouseEnter" MouseLeave="Exit_button_MouseLeave" MouseLeftButtonDown="Exit_button_MouseLeftButtonDown" MouseLeftButtonUp="Exit_button_MouseLeftButtonUp"/>
+                    <Image Source="/img/Maximize_default.png" Grid.Column="3" Grid.Row="0" Name="Maximize_button"  VerticalAlignment="Top" HorizontalAlignment="Right" MouseEnter="Maximize_button_MouseEnter" MouseLeave="Maximize_button_MouseLeave" MouseLeftButtonDown="Maximize_button_MouseLeftButtonDown" MouseLeftButtonUp="Maximize_button_MouseLeftButtonUp" />
+                    <Image Source="/img/Minimize_default.png" Grid.Column="2" Grid.Row="0" Name="Minimize_button"  VerticalAlignment="Top" HorizontalAlignment="Right" MouseEnter="Minimize_button_MouseEnter" MouseLeave="Minimize_button_MouseLeave" MouseLeftButtonDown="Minimize_button_MouseLeftButtonDown" MouseLeftButtonUp="Minimize_button_MouseLeftButtonUp"/>
+                    <Image Source="/img/ikona.png" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Visibility="Visible" Margin="10 0 0 0"/>
+                    <Label Content="Rosný bod" Grid.Row="0" Grid.Column="0" Width="100" HorizontalAlignment="Left" Padding="40 2 0 2"  VerticalAlignment="Center"/>
+                </Grid>
+                <Grid Margin="10 5 10 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="4*" />
+                    </Grid.ColumnDefinitions>
+                    <!--
+                <Button Content="Připojit"  Grid.Column="0" x:Name="Connect_to_device" Click="Connect_to_device_Click" />
+                <Button Content="Odpojit"  Grid.Column="1" x:Name="Disconnect_from_device" Click="Disconnect_from_device_Click" Background="Red" />
+                -->
+                    <Menu x:Name="menu" VerticalAlignment="Stretch" HorizontalAlignment="Left" Margin="10 0 0 0" Width="150"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" DockPanel.Dock="Top" FontSize="{Binding Controlsize2}">
+                        <MenuItem Header="_Soubor" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                            <MenuItem Header="_Připojit" x:Name="Connect_to_device" Click="Connect_to_device_Click"/>
+                            <MenuItem Header="_Odpojit" x:Name="Disconnect_from_device" Click="Disconnect_from_device_Click" Background="Red" IsEnabled="False"/>
+                            <MenuItem Header="_Zavřít" Click="Close_app"/>
+                        </MenuItem>
+                        <MenuItem Header="_Nápověda" Height="25"  HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <MenuItem Header="_Zobrazit nápovědu" Click="MenuItem_Click"/>
+                            <MenuItem Header="_O programu" Click="MenuItem_Click2"/>
+
+
+                        </MenuItem>
+                    </Menu>
+                    <TextBlock x:Name="Status" Grid.Column="4" Margin="10,0,10,0" Text="Neaktivní" Background="LightGray" IsEnabled="False" TextAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                </Grid>
+                <TabControl Margin="10,10,9.6,10" Padding="10,0,10,0" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" x:Name="Tab" FontSize="{Binding Controlsize2}">
+                    <TabItem Header="Měření regulátorem">
+                        <Grid  Background="#FFE5E5E5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Height="340" Margin="5 10 0 0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1.3*" />
+                                        <ColumnDefinition Width="1.1*" />
+                                        <ColumnDefinition Width="1.3*" />
+                                        <ColumnDefinition Width="1.4*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button Content="Spustit měření" x:Name="Auto_Messurement_Start" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Auto_Messurement_Start_Click" Grid.Column="0" Grid.Row="0" Margin="0 2 0 2" FontSize="{Binding Controlsize2}" IsEnabled="False" />
+                                    <Button Content="Zastavit měření" x:Name="Auto_Messurement_Stop" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Auto_Messurement_Stop_Click" Grid.Column="0" Grid.Row="1" Margin="0 2 0 2" FontSize="{Binding Controlsize2}" IsEnabled="False" />
+
+                                    <TextBox Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="CoolerTemp_auto"  Text="{Binding Report.PT100TempSence}" Margin="5 0 5 0" />
+                                    <Label Grid.Column="2" Grid.Row="0" Content="Teplota zrcadla [°C]" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <Label Content="Teplota okolí [°C]" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
+                                    <TextBox HorizontalAlignment="Stretch" Grid.Column="2" Grid.Row="3" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Envtemp_auto" Text="{Binding Report.EnvTempReport}" VerticalAlignment="Center" Padding="0 4 0 4" Margin="5 0 5 0" />
+                                    <Label Content="Atmos. tlak [hPa]" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <TextBox Grid.Row="5" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Pressure_auto" Text="{Binding Report.EnvPressureReport}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4" Margin="5 0 5 0" />
+                                    <Label Content="Fotoresistor [mV]" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4"  Grid.Row="7" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Light_auto" Text="{Binding Report.LightSensorReport_mV}" Margin="5 0 5 0" />
+                                    <Label Content="Požadovaná teplota"  HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
+                                    <Label Content="Proud [A]" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
+
+                                    <TextBox Grid.Row="1" Grid.Column="3"  IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.AmperageShow}" VerticalAlignment="Center"  Padding="0 4 0 4" Margin="5 0 5 0" />
+                                    
+                                    <Label Content="Příkon [W]" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
+                                    <TextBox Grid.Row="3" Grid.Column="3"  IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch"  TextWrapping="Wrap" Text="{Binding Report.WattageShow}" VerticalAlignment="Center"  Padding="0 4 0 4" Margin="5 0 5 0" />
+                                    <Label Content="Trans. výkon [W]" Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <TextBox Grid.Row="5" Grid.Column="3"  IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.CoolingShow}" VerticalAlignment="Center"  Padding="0 4 0 4" Margin="5 0 5 0" />
+                                    <Label Grid.Row="6" Grid.Column="3" Content="Teplota chladiče [°C]" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
+                                    <TextBox Grid.Row="7" Grid.Column="3" IsReadOnly="True" IsEnabled="False" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.CoolerTempSencetext}" VerticalAlignment="Center"  Padding="0 4 0 4" Margin="5 0 5 0" />
+
+                                    <Label Content="Zapsaná teplota" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4"  Grid.Row="5" Grid.Column="1" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Set_Temperature" Text="{Binding RequestedValue}" Margin="10 0 10 0" />
+
+                                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4"  Grid.Row="5" Grid.Column="0"  x:Name="Request_temperature_manual" TextWrapping="Wrap" Text="{Binding RequestedString}" IsEnabled="False" Margin="0 0 10 0" TextChanged="Request_temperature_manual_Text_Changed" IsKeyboardFocusWithinChanged="Request_temperature_manual_IsKeyboardFocusWithinChanged" />
+                                    <Rectangle  Grid.Row="6" Grid.Column="0"  Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stroke="Gray" Margin="0 1 10 1" />
+                                    <Label Grid.Row="6" Grid.Column="0" Content="{Binding RequestTemperatureManualText}" Grid.ColumnSpan="2" x:Name="lbl1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0 1 10 1" FontSize="9.8" />
+                                    <Button Content="Potvrdit požadovanou teplotu" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" x:Name="ReqConfirm" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="ReqConfirm_Click" IsEnabled="False" Margin="0 2 10 2" FontSize="{Binding Controlsize2}"/>
+
+
+                                    <CheckBox x:Name="Automatic_temp_control_ON" Content="Automatické řízení teploty" HorizontalAlignment="Left" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Top" IsChecked="True" Checked="Automatic_temp_control_ON_Checked" Unchecked="Automatic_temp_control_ON_Unchecked" FontSize="{Binding Controlsize2}" IsEnabled="false"/>
+                                    <Button Grid.Row="13" Grid.Column="0" x:Name="Add_row" Content="Přidat řádek" Click="Add_row_Click" Grid.ColumnSpan="2"  Margin=" 5 1 5 1" FontSize="{Binding Controlsize2}" />
+                                    <Button Grid.Row="13" x:Name="Remove_row" Content="Odstranit řádek" Click="Remove_row_Click"  Grid.Column="2" Grid.ColumnSpan="2" Margin=" 5 1 5 1" FontSize="{Binding Controlsize2}" />
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="0" Grid.Column="1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25" />
+                                        <RowDefinition Height="300" />
+                                        <RowDefinition Height="25" />
+                                    </Grid.RowDefinitions>
+                                    <WpfPlot x:Name="WpfPlot1" Margin="0,0,0,5" Grid.RowSpan="2"/>
+                                    <ComboBox x:Name="Graph_selector_1" Grid.Row="2"  HorizontalAlignment="Left"  FontSize="{Binding Controlsize2}" Width="120" SelectionChanged="Graph_selector_1_SelectionChanged" IsEnabled="False">
+                                        <ComboBoxItem Content="Teplota zrcadla" />
+                                        <ComboBoxItem Content="Teplota okolí" />
+                                        <ComboBoxItem Content="Atmosférický tlak" />
+                                        <ComboBoxItem Content="Fotorezistor" />
+                                        <ComboBoxItem Content="Proud" />
+                                        <ComboBoxItem Content="Výkon" />
+                                        <ComboBoxItem Content="Teplota chladiče" />
+                                    </ComboBox>
+
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <DataGrid Grid.Row="1" Height="{Binding Heightfix}" FontSize="{Binding Controlsize2}" x:Name="Auto_Messuring_Results" AutoGenerateColumns="False" ItemsSource="{Binding Record}" Margin="10,10,10,10" Padding="10,10,10,10" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" >
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Čas" Binding="{Binding Time,StringFormat=\{0:dd.MM.yy HH:mm:ss\}}" Width="160" />
+                                        <DataGridTextColumn Header="Vnější teplota" Binding="{Binding ENV_Temperature}" Width="160" />
+                                        <DataGridTextColumn Header="Vnitřní teplota" Binding="{Binding PT100_Temperature}"  Width="160" />
+                                        <DataGridTextColumn Header="Tlak" Binding="{Binding ENV_Pressure}" Width="160" />
+                                        <DataGridTextColumn Header="Vlhkost" Binding="{Binding Humidity}" Width="160" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                    <!--  <TabItem Header="Výsledky měření">
+
+                    <Grid Margin="5 5 5 5 ">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height= "45*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                           
+                            <Button Grid.Row="0" x:Name="Export_list" Content="Exportovat" Click="Export_list_Click"  Grid.Column="5" Margin=" 5 0 5 0" />
+                        </Grid>
+                        
+                    </Grid>
+                </TabItem>-->
+                    <TabItem Header="Manuální měření">
+                        <Grid  Background="#FFE5E5E5" HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel>
+                                <Grid Height="340" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5 10 0 0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1.3*" />
+                                        <ColumnDefinition Width="1.1*" />
+                                        <ColumnDefinition Width="1.3*" />
+                                        <ColumnDefinition Width="1.4*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button Content="Spustit měření" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" x:Name="Manual_Messurement_Start" Click="Manual_Messurement_Start_Click" Margin="0 2 0 2" IsEnabled="False"/>
+                                    <Button Content="Zastavit měření" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" x:Name="Manual_Messurement_Stop" Click="Manual_Messurement_Stop_Click" Margin="0 2 0 2" IsEnabled="False" />
+                                    <TextBox Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="CoolerTemp" Text="{Binding Report.PT100TempSence}" Margin="5 0 5 0" Padding="0 4 0 4"/>
+                                    <Label Grid.Column="2" Grid.Row="0" Content="Teplota zrcadla [°C]" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <Label Content="Teplota okolí [°C]" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <TextBox HorizontalAlignment="Stretch" Grid.Column="2" Grid.Row="3" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Envtemp" Text="{Binding Report.EnvTempReport}" VerticalAlignment="Center" Margin="5 0 5 0" Padding="0 4 0 4"/>
+                                    <Label Content="Atmos. tlak [hPa]" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <TextBox Grid.Row="5" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Pressure" Text="{Binding Report.EnvPressureReport}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5 0 5 0" Padding="0 4 0 4"/>
+                                    <Label Content="Fotoresistor [mV]" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
+                                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="7" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Light" Text="{Binding Report.LightSensorReport_mV}" Margin="5 0 5 0" Padding="0 4 0 4"/>
+                                    <Label Content="Proud [A]" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <TextBox Grid.Row="1" Grid.Column="3"  IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.AmperageShow}" VerticalAlignment="Center" Margin="5 0 5 0" Padding="0 4 0 4"/>
+                                    <Label Content="Příkon [W]" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <TextBox Grid.Row="3" Grid.Column="3"  IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch"  TextWrapping="Wrap" Text="{Binding Report.WattageShow}" VerticalAlignment="Center" Margin="5 0 5 0"  Padding="0 4 0 4"/>
+                                    <Label Content="Trans. výkon [W]" Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <TextBox Grid.Row="5" Grid.Column="3"  IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.CoolingShow}" VerticalAlignment="Center" Margin="5 0 5 0" Padding="0 4 0 4"/>
+                                    <Label Content="Požadovaný výkon [%] (-4 až 100)" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Grid.ColumnSpan="2" Padding="0 2 0 2" />
+                                    <TextBox Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" x:Name="manualPow" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="0" TextChanged="manualPow_TextChanged" IsEnabled="False" Padding="0 4 0 4" Margin="0 0 10 0" />
+                                    <Rectangle  Grid.Row="6" Grid.Column="0"  Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stroke="Gray" Margin="0 1 10 1" />
+                                    <Label Grid.Row="6" Grid.Column="0" Content="{Binding RequestPowerManualText}" Grid.ColumnSpan="2" x:Name="lbl2" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0 1 10 1" FontSize="9.8" />
+                                    <Button Content="Potvrdit požadovaný výkon" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" x:Name="ReqPowConfirm" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="ReqPowConfirm_Click" Margin="0 2 10 2" FontSize="{Binding Controlsize2}" IsEnabled="False"/>
+                                    <Label Grid.Row="6" Grid.Column="3" Content="Teplota chladiče [°C]" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <TextBox Grid.Row="7" Grid.Column="3" IsReadOnly="True" IsEnabled="False" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.CoolerTempSencetext}" VerticalAlignment="Center" Margin="5 0 5 0" Padding="0 4 0 4"/>
+                                    <Button Grid.Row="13" Grid.Column="0" x:Name="Add_row2" Content="Přidat řádek" Click="Add_row_Click" Grid.ColumnSpan="2"  Margin=" 5 1 5 1" FontSize="{Binding Controlsize2}" />
+                                    <Button Grid.Row="13" x:Name="Remove_row2" Content="Odstranit řádek" Click="Remove_row_Click"  Grid.Column="2" Grid.ColumnSpan="2" Margin=" 5 1 5 1" FontSize="{Binding Controlsize2}" />
+                                    <Label Content="Pozn.: Teploty nižší než 0 °C aktivují pojistku." Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="3" Padding="0 2 0 2" FontSize="{Binding Controlsize2}"/>
+
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="25" />
+                                        <RowDefinition Height="300" />
+                                        <RowDefinition Height="25" />
+                                    </Grid.RowDefinitions>
+                                    <ComboBox x:Name="Graph_selector_2" Grid.Row="2" HorizontalAlignment="Left" Width="120" SelectionChanged="Graph_selector_2_SelectionChanged" IsEnabled="False">
+                                        <ComboBoxItem Content="Teplota zrcadla" />
+                                        <ComboBoxItem Content="Teplota okolí" />
+                                        <ComboBoxItem Content="Atmosférický tlak" />
+                                        <ComboBoxItem Content="Fotorezistor" />
+                                        <ComboBoxItem Content="Proud" />
+                                        <ComboBoxItem Content="Výkon" />
+                                        <ComboBoxItem Content="Teplota chladiče" />
+                                    </ComboBox>
+                                    <WpfPlot x:Name="WpfPlot2" Margin="0,0,0,5" Grid.RowSpan="2" />
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <DataGrid Grid.Row="1" Height="{Binding Heightfix}" FontSize="{Binding Controlsize2}" x:Name="Auto_Messuring_Results2" AutoGenerateColumns="False" ItemsSource="{Binding Record}" Margin="10,10,10,10" Padding="10,10,10,10" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" >
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Čas" Binding="{Binding Time,StringFormat=\{0:dd.MM.yy HH:mm:ss\}}" Width="160" />
+                                        <DataGridTextColumn Header="Vnější teplota" Binding="{Binding ENV_Temperature}" Width="160" />
+                                        <DataGridTextColumn Header="Vnitřní teplota" Binding="{Binding PT100_Temperature}"  Width="160" />
+                                        <DataGridTextColumn Header="Tlak" Binding="{Binding ENV_Pressure}" Width="160" />
+                                        <DataGridTextColumn Header="Vlhkost" Binding="{Binding Humidity}" Width="160" />
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Softwarové konstanty">
+                        <Grid Background="#FFE5E5E5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="15*" />
+                                <RowDefinition Height="15*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="1.2*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Grid.Row="1" x:Name="magic" HorizontalAlignment="Left" VerticalAlignment="Top" Width="10" Height="10" BorderThickness="0" Click="Magic_Click"/>
+                            <Grid Grid.Row="0" Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="1.5*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox  Grid.Column="1" Text="Malým a s mezerou"  x:Name="Password_box" Margin="5 0 5 0" VerticalAlignment="Center" />
+                                <Label Content="Heslo" Grid.Column="0" Padding="10 2 10 2" />
+                                <Button Content="Potvrdit heslo" Grid.Column="2"  x:Name="Password_Confirm" VerticalAlignment="Center" Padding="10 2 10 2" Click="Password_Confirm_Click" />
+
+                            </Grid>
+                           
+                            <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.3*" />
+                                    <ColumnDefinition Width="0.5*" />
+                                    <ColumnDefinition Width="0.5*" />
+                                    <ColumnDefinition Width="0.5*" />
+                                    <ColumnDefinition Width="1.2*" />
+                                    <ColumnDefinition Width="0.5*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Rectangle Stroke="Black" StrokeThickness="1" Fill="LightBlue" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3" />
+                                <Rectangle Stroke="Black" StrokeThickness="1" Fill="LightGreen" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="5" />
+                                <Rectangle Stroke="Black" StrokeThickness="1" Fill="LightYellow" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" Grid.RowSpan="6" />
+                                <Border BorderThickness="1" Grid.Row="0" Grid.ColumnSpan="2"
+                            CornerRadius="12,12,0,0" BorderBrush="Black" Background="LightBlue">
+                                </Border>
+                                <Border BorderThickness="1" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"
+                            CornerRadius="12,12,0,0" BorderBrush="Black" Background="LightGreen">
+                                </Border>
+                                <Border BorderThickness="1" Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2"
+                            CornerRadius="12,12,0,0" BorderBrush="Black" Background="LightYellow">
+                                </Border>
+                                <Label Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Content="Regulátor" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                <Label Grid.Row="0" Grid.Column="4" Grid.ColumnSpan="2" Content="Automatické měření" HorizontalAlignment="Center" VerticalAlignment="Top" />
+
+                                <Label Grid.Row="1" Grid.Column="0" Content="R0" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <Label  Grid.Row="2" Grid.Column="0" Content="Td" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <Label Grid.Row="3" Grid.Column="0" Content="Ti" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <TextBox Grid.Row="1" Grid.Column="1" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="r0_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding HBridgeControl.R0}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <TextBox Grid.Row="3" Grid.Column="1" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="Ti_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding HBridgeControl.Ti}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="Td_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding HBridgeControl.Td}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <Button x:Name="Run_fan" Click="Run_fan_Click" Grid.Column="6" Grid.Row="1" Margin="5" Grid.RowSpan="2" Content="Spustit ventilátor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  FontSize="{Binding Controlsize2}" />
+                                <Button x:Name="Apply" Grid.Row="4" Grid.Column="6" Content="Aplikovat změny" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Apply_Click" FontSize="{Binding Controlsize2}" Margin="5" Grid.RowSpan="2"/>
+                                <Label Grid.Row="1" Grid.Column="4" Content="Hranice chlazení [mV]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <TextBox Grid.Row="1" Grid.Column="5" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="Low_Light_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding Automode.Low_light_Const}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <Label Grid.Row="2" Grid.Column="4" Content="Hranice zahřívání [mV]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <TextBox Grid.Row="2" Grid.Column="5" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="High_Light_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding Automode.High_light_Const}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <Label Grid.Row="3" Grid.Column="4" Content="Zpoždění náběhu [ticks]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <TextBox Grid.Row="3" Grid.Column="5" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="speed_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding Automode.Speed_Const}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <Label Grid.Row="4" Grid.Column="4" Content="Zpoždění měření [ticks]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <TextBox Grid.Row="4" Grid.Column="5" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="speed2_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding Automode.Speed2_Const}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <Label Grid.Row="5" Grid.Column="4" Content="Počáteční krok [°C]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <TextBox Grid.Row="5" Grid.Column="5" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="InicialStep_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding Automode.Inicialstep}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <Label Grid.Row="6" Grid.Column="4" Content="Měřící krok [°C]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <TextBox Grid.Row="6" Grid.Column="5" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="MessuringStep_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding Automode.Messuringstep}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <Label Grid.Row="8" Grid.Column="4" Content="Výchozí pozadí [mV]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <TextBox Grid.Row="8" Grid.Column="5" IsReadOnly="True" IsEnabled="False" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding Automode.Lightbackground}" VerticalAlignment="Bottom" />
+
+
+                                <Label Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Content="Interní proměnné regulátoru" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                <Label Grid.Row="2" Grid.Column="2" Content="D" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <Label Grid.Row="1" Grid.Column="2" Content="P" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <Label Grid.Row="3" Grid.Column="2" Content="I" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <Label  Grid.Row="4" Grid.Column="2" Content="u" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <Label  Grid.Row="5" Grid.Column="2" Content="tick [ms]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <TextBox Grid.Row="1" Grid.Column="3" IsEnabled="false" IsReadOnly="True" Text="{Binding HBridgeControl.SP}" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <TextBox Grid.Row="3" Grid.Column="3" IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding HBridgeControl.SI}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <TextBox Grid.Row="2" Grid.Column="3" IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding HBridgeControl.SD}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <TextBox Grid.Row="4" Grid.Column="3" IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding HBridgeControl.Su}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                                <TextBox Grid.Row="5" Grid.Column="3" IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding HBridgeControl.STs}" VerticalAlignment="Center" Margin="0 0 20 0"/>
+
+
+                            </Grid>
+                            <Image Source="/img/Navod.png" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Margin="10 10 10 10"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Síťová komunikace">
+                        <StackPanel>
+                            <Grid Height="40" Background="#FFE5E5E5" Margin="0 10 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+
+                                </Grid.RowDefinitions>
+                                <Button Content="Připojit" x:Name="Connect_to_device2" Click="Connect_to_device_Click" Grid.Column="0" Grid.Row="0" Margin="6" FontSize="{Binding Controlsize2}"/>
+                                <Button Content="Odpojit" x:Name="Disconnect_from_device2" Click="Disconnect_from_device_Click" Grid.Column="1" Grid.Row="0" Margin="6" Background="Red" IsEnabled="False" FontSize="{Binding Controlsize2}"/>
+                            </Grid>
+                            <Grid Background="#FFE5E5E5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="3*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="1.2*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Row="0" Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="20*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="20*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                    <TextBlock Text="Výpis komunikace" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Margin="0 5 0 0" />
+                                    <RichTextBox Grid.Row="1"  Grid.Column="1" Name="comm_field" Focusable="False" IsEnabled="False" Margin="0 5 0 20" Height="{Binding Heightfix2}"/>
+                            </Grid>
+
+                                <Grid Grid.Row ="0" Grid.Column="0" Background="#FFE5E5E5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="3*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Row="0" Grid.Column="1"  Content="Seznam sériových zařízení" HorizontalAlignment="Center" VerticalAlignment="Top" />
+                                    <ListBox Grid.Column="1" Height="100" HorizontalAlignment="Stretch" Grid.Row="1" Grid.RowSpan="5" VerticalAlignment="Stretch" Margin="2 2 2 2" x:Name="SerialList" ItemsSource="{Binding ObservableDevices}" SelectionChanged="SerialList_SelectionChanged"/>
+                                    <Label Content="COM port" Grid.Row="6" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                    <TextBox Grid.Row="6" Grid.Column="1"  HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding ComPort.COM_Adress}" VerticalAlignment="Center" />
+                                </Grid>
+                           
+                        </Grid>
+            </StackPanel>
+            </TabItem>
+                    <TabItem Header="Náhled zařízení">
+                        <Grid Height="{Binding ImageHeightFix}" Width="{Binding ImageWeightFix}" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Image Source="/img/Anim1.png" Name="Machine_Animation" Grid.Column="0" Grid.Row="0" Grid.RowSpan="60" Grid.ColumnSpan="30" />
+                        </Grid>
+
+                    </TabItem>
+                </TabControl>
+            </StackPanel>
+
+        </Grid>
+        <!-- <Button x:Name="Run_fan" Grid.Row="6" Grid.Column="1" Content="Spustit manualně ventilátor" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="Run_fan_Click" /> -->
+    </Border>
+</Window>
