@@ -37,11 +37,12 @@ namespace Rosny_Bod_App
         public float WattageShow { get; set; } = 0;
         public float CoolingShow { get; set; } = 0;
         public float MessuredMinimumAmperage { get; set; } = 1024;
+        public string LastMessage { get; set; }
 
 
         public bool AnalyzeString(string MergedString)
         {
-
+            LastMessage = MergedString;
             if (MergedString== "Device_Disconnect") {
                 return false;
             }

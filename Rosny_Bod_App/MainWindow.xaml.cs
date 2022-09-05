@@ -9,6 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -223,7 +224,7 @@ namespace Rosny_Bod_App
         public FileStream Records = null;
         public Window1 win2;
         public Window2 win3;
-        public int Refresh_delay = 30; 
+        public int Refresh_delay = 90; 
 
         public MainWindow()
         {
@@ -289,6 +290,14 @@ namespace Rosny_Bod_App
                 WpfPlot2.Render();
                 WpfPlot1.Refresh();
                 WpfPlot1.Render();
+
+               var dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+               dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+               dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,100);
+               dispatcherTimer.Start();
+
+
+
                 DataContext = this;
             }
         }
@@ -404,67 +413,6 @@ namespace Rosny_Bod_App
                             #endregion
 
                             // Modifikace UI a jeho refresh
-                            ListUpdatetimer++;
-                            if (ListUpdatetimer > Refresh_delay)
-                            { // obnova záznamového listu
-                                Teplota1.UpdateGraphData(Report.PT100TempSence);
-                                Vnejsi_Teplota1.UpdateGraphData(Report.EnvTempReport);
-                                Atmos_press1.UpdateGraphData(Report.EnvPressureReport);
-                                Osvetleni1.UpdateGraphData(Report.LightSensorReport_mV);
-                                Proud1.UpdateGraphData(Report.AmperageShow);
-                                Vykon1.UpdateGraphData(Report.WattageShow);
-                                ListUpdatetimer = 0;
-
-                            }
-                            GraphUpdatetimer++;
-                            if (GraphUpdatetimer > Refresh_delay) //Obnova UI
-                            {
-                                #region UI_Update
-                                App.Current.Dispatcher.InvokeAsync(() =>
-                                {
-                                    #region Graph_Update
-                                    GraphSelect();
-                                    GraphSelect2();
-                                    WpfPlot2.Refresh();
-                                    WpfPlot2.Render();
-                                    WpfPlot1.Refresh();
-                                    WpfPlot1.Render();
-                                    #endregion
-                                    #region Záznam komunikace 
-                                    comm_field.AppendText(IncomingString + '\r');
-                                    comm_field.AppendText(ComPort.LastMsg + '\r');
-                                    if (com_updater > Heightfix2 / 40)
-                                    {
-                                        comm_field.SelectAll();
-                                        comm_field.Selection.Text = "";
-                                        com_updater = 0;
-                                    }
-                                    com_updater++;
-                                    #endregion
-                                    #region Stoping_States
-                                    if (StopMessurementRequest && MessurementStopStates == 0)
-                                    {
-                                        Status.Text = "Stabilizuji teplotu regulátorem";
-                                        Status.Background = Brushes.LightGreen;
-                                    }
-                                    if (StopMessurementRequest && MessurementStopStates == 1)
-                                    {
-                                        Status.Text = "Chladím " + Math.Abs(60 - Atimer.Difference.TotalSeconds).ToString("F2", CultureInfo.CurrentCulture) + "s";
-                                        Status.Background = Brushes.LightGreen;
-                                    }
-                                    if (!StopMessurementRequest && !RegulatorActive && !AutomodeActive && !ManualmodeActive)
-                                    {
-                                        Status.Text = "Neaktivní";
-                                        Status.Background = Brushes.LightGray;
-                                        Auto_Messurement_Start.IsEnabled = true;
-                                        Manual_Messurement_Start.IsEnabled = true;
-                                        Disconnect_from_device.IsEnabled = true;
-                                    }
-                                    #endregion
-                                });
-                                #endregion
-                                GraphUpdatetimer = 0;
-                            }
                             if (StopMessurementRequest)
                             {
                                 if (MessurementStopStates == 0)
@@ -541,7 +489,6 @@ namespace Rosny_Bod_App
                                 //TODO:
                                 ComPort.SerialComWrite(Heart + "111111;" + ManualRequestedPowerPositive.ToString("000") + ";" + ManualRequestedPowerNegative.ToString("000") + ";255");
                             }
-
                             if (RegulatorActive) //Pokud je aktivní manuální režim proveď:
                             {
 
@@ -1660,6 +1607,71 @@ namespace Rosny_Bod_App
             win3 = new Window2();
             win3.Show();
         }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            // Updating the Label which displays the current second
+
+            Teplota1.UpdateGraphData(Report.PT100TempSence);
+            Vnejsi_Teplota1.UpdateGraphData(Report.EnvTempReport);
+            Atmos_press1.UpdateGraphData(Report.EnvPressureReport);
+            Osvetleni1.UpdateGraphData(Report.LightSensorReport_mV);
+            Proud1.UpdateGraphData(Report.AmperageShow);
+            Vykon1.UpdateGraphData(Report.WattageShow);
+            Teplota_chladice1.UpdateGraphData(Report.CoolerTempSence);
+
+            App.Current.Dispatcher.Invoke(() =>
+            {
+
+                #region Graph_Update
+                GraphSelect();
+                GraphSelect2();
+                WpfPlot2.Refresh();
+                WpfPlot2.Render();
+                WpfPlot1.Refresh();
+                WpfPlot1.Render();
+                #endregion
+                #region Záznam komunikace 
+                comm_field.AppendText(Report.LastMessage + '\r');
+                comm_field.AppendText(ComPort.LastMsg + '\r');
+                if (com_updater > Heightfix2 / 40)
+                {
+                    comm_field.SelectAll();
+                    comm_field.Selection.Text = "";
+                    com_updater = 0;
+                }
+                com_updater++;
+                #endregion
+                #region Stoping_States
+                if (StopMessurementRequest && MessurementStopStates == 0)
+                {
+                    Status.Text = "Stabilizuji teplotu regulátorem";
+                    Status.Background = Brushes.LightGreen;
+                }
+                if (StopMessurementRequest && MessurementStopStates == 1)
+                {
+                    Status.Text = "Chladím " + Math.Abs(60 - Atimer.Difference.TotalSeconds).ToString("F2", CultureInfo.CurrentCulture) + "s";
+                    Status.Background = Brushes.LightGreen;
+                }
+                if (!StopMessurementRequest && !RegulatorActive && !AutomodeActive && !ManualmodeActive)
+                {
+                    Status.Text = "Neaktivní";
+                    Status.Background = Brushes.LightGray;
+                    Auto_Messurement_Start.IsEnabled = true;
+                    Manual_Messurement_Start.IsEnabled = true;
+                    Disconnect_from_device.IsEnabled = true;
+                }
+                #endregion
+            });
+
+
+
+
+
+            // Forcing the CommandManager to raise the RequerySuggested event
+            CommandManager.InvalidateRequerySuggested();
+        }
+
     }
 }
 #endregion
