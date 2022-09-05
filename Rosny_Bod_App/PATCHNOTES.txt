@@ -1,0 +1,27 @@
+Aplikace
+
+Kompletně předělaný systém ukládání souborů. Opraveny chybné zápisy , a .
+Aktualizovaný graf
+Aktualizované UI s novým designem, vykreslování je nově závislé na čase, vyhozen souhlas s přečtením návodu na použití
+Přidáno tajné tlačítka na heslo
+Přidána zpětná vazba na heslo
+Opravený bug v regulátoru (občas počítal s nekonečnem, kvůli chybě zaokrouhlení)
+Dodán digitální podpis aplikace
+Vylepšení detekce vstupních dat. (Detekce selhání senzorů)
+Zesílení ochran proti neplatným stavům. (UI se adaptivně zamyká dle potřeby)
+Přidán heartbeat
+Posíleny bezpečnostní ochrany na extrémní podmínky
+Přidána 2 nová okna - O aplikaci a Zobrazit nápovědu
+Přidán Options soubor
+Rozšířeno manuální / automatické měření
+Doplněny modernizované ikony, náhled zařízení uvnitř, návod na nastavení regulátoru, logo TUL
+Aplikace Loguje jen při měření
+
+Mikrokontroler
+
+Zrychlení odečtu BMP280 a odstranění blokování vlákna
+Dodána PT100 tabulka s certifikací ITS-90
+Zpětná vazba na heartbeat
+Opravený bug bezpečnostní funkce, který blokoval další zápis hodnot do H můstku (Freeze)
+
+
