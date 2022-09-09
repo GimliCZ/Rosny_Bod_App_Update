@@ -90,7 +90,9 @@ namespace Rosny_Bod_App
         /// <summary>
         /// Zpětná vazba UI na manuální zadání požadované teploty
         /// </summary>
-        public string RequestTemperatureManualText { get; set; }
+        public string RequestTemperatureManualText { get; set; } = "Nápověda";
+
+        public string PowerManualText { get; set; } = "Nápověda";
 
         /// <summary>
         /// Konstanta připravující program na ukončení spojení se zařízením
@@ -187,6 +189,8 @@ namespace Rosny_Bod_App
 
         public int Controlsize2 { get; set; } = 9;
 
+        public int Controlsize3 { get; set; } = 18;
+
         public int Heightfix { get; set; } = 130;
 
         public int Heightfix2 { get; set; } = 400;
@@ -215,7 +219,6 @@ namespace Rosny_Bod_App
         public double ManualRequestedPowerPositive { get; set; } = 0;
         public double ManualRequestedPowerNegative = 0;
         public bool EnableManualParse { get; set; } = false;
-        public string RequestPowerManualText { get; set; } = "";
         public int ImageHeightFix { get; set; } = 400;
         public int ImageWeightFix { get; set; } = 710;
         public int AnimationCounter = 0;
@@ -224,7 +227,8 @@ namespace Rosny_Bod_App
         public FileStream Records = null;
         public Window1 win2;
         public Window2 win3;
-        public int Refresh_delay = 90; 
+        public int Refresh_delay = 90;
+        public double ReqPow { get; set; } = 0;
 
         public MainWindow()
         {
@@ -290,15 +294,31 @@ namespace Rosny_Bod_App
                 WpfPlot2.Render();
                 WpfPlot1.Refresh();
                 WpfPlot1.Render();
-
-               var dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
-               dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-               dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0,100);
-               dispatcherTimer.Start();
-
+                var dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+                dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+                dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+                dispatcherTimer.Start();
+                manualPow.KeyDown += new KeyEventHandler(ManualPow_KeyDown);
+                Request_temperature_manual.KeyDown += new KeyEventHandler(Request_temperature_manual_KeyDown);
 
 
                 DataContext = this;
+            }
+        }
+
+        private void Request_temperature_manual_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ReqConfirm_Click(this,new RoutedEventArgs());
+            }
+        }
+
+        private void ManualPow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ReqPowConfirm_Click(this, new RoutedEventArgs());
             }
         }
 
@@ -325,8 +345,10 @@ namespace Rosny_Bod_App
                 {
                     Heart = Heart_beat(Heart);
                     Connect_to_device.Background = Brushes.Green;
+                    Connect_to_device.IsEnabled = false;
                     Disconnect_from_device.Background = (Brush)new BrushConverter().ConvertFrom("#f0f0f0"); ;
                     Connect_to_device2.Background = Brushes.Green;
+                    Connect_to_device2.IsEnabled = false;
                     Disconnect_from_device2.Background = (Brush)new BrushConverter().ConvertFrom("#f0f0f0"); ;
 
                     ComPort.SerialComWrite(Heart + "111111;000;001;000"); // Po připojení spusť plnou komunikaci se zařízením
@@ -348,8 +370,14 @@ namespace Rosny_Bod_App
                                 ComPort.SerialLink.Close();
                                 App.Current.Dispatcher.Invoke(() =>
                                 {
-                                    Connect_to_device.Background = (Brush)new BrushConverter().ConvertFrom("#f0f0f0"); ;
+                                    Connect_to_device.Background = (Brush)new BrushConverter().ConvertFrom("#f0f0f0");
+                                    Connect_to_device2.Background = (Brush)new BrushConverter().ConvertFrom("#f0f0f0");
                                     Disconnect_from_device.Background = Brushes.Red;
+                                    Disconnect_from_device2.Background = Brushes.Red;
+                                    Disconnect_from_device.IsEnabled = false;
+                                    Disconnect_from_device2.IsEnabled = false;
+                                    Connect_to_device.IsEnabled = true;
+                                    Connect_to_device2.IsEnabled = true;
                                     Status.Text = "Neaktivní";
                                     Status.Background = Brushes.LightGray;
                                 });
@@ -361,8 +389,8 @@ namespace Rosny_Bod_App
                                 ComPort.SerialComWrite(Heart + "111111;000;001;255");
                                 App.Current.Dispatcher.Invoke(() =>
                                 {
-                                  Status.Text = "Ochrana proti přehřátí aktivní";
-                                  Status.Background = Brushes.Orange;
+                                    Status.Text = "Ochrana proti přehřátí aktivní";
+                                    Status.Background = Brushes.Orange;
                                 });
                                 AlertTriggered = true;
                             }
@@ -417,6 +445,15 @@ namespace Rosny_Bod_App
                             {
                                 if (MessurementStopStates == 0)
                                 {
+                                    App.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        Connect_to_device.IsEnabled = false;
+                                        Connect_to_device2.IsEnabled = false;
+                                        Disconnect_from_device.IsEnabled = false;
+                                        Disconnect_from_device2.IsEnabled = false;
+                                        Auto_Messurement_Start.IsEnabled = false;
+                                        Manual_Messurement_Start.IsEnabled = false;
+                                    });
                                     RequestedValue = Math.Round(Report.EnvTempReport);
                                     RegulatorActive = true;
                                     ManualmodeActive = false;
@@ -459,6 +496,11 @@ namespace Rosny_Bod_App
                                         HBridgeControl.Su = HBridgeControl.U.ToString("F2", CultureInfo.CurrentCulture);
                                         MessurementStopStates = 0;
                                         StopMessurementRequest = false;
+                                        App.Current.Dispatcher.Invoke(() =>
+                                        {
+                                            Disconnect_from_device.IsEnabled = true;
+                                            Disconnect_from_device2.IsEnabled = true;
+                                        });
                                         Atimer.Stop_timer();
                                     }
                                 }
@@ -487,6 +529,7 @@ namespace Rosny_Bod_App
                             if (ManualmodeActive)
                             {
                                 //TODO:
+                                Automode.Get_background(Report.LightSensorReport, Report.EnvTempReport);
                                 ComPort.SerialComWrite(Heart + "111111;" + ManualRequestedPowerPositive.ToString("000") + ";" + ManualRequestedPowerNegative.ToString("000") + ";255");
                             }
                             if (RegulatorActive) //Pokud je aktivní manuální režim proveď:
@@ -545,7 +588,8 @@ namespace Rosny_Bod_App
             Graph_selector_2.IsEnabled = false;
             int x = 0;
             ReadyForDisconnect = true;
-
+            Report.LastMessage = "";
+            ComPort.LastMsg = "";
             while (true)
             {
                 Heart = Heart_beat(Heart);
@@ -562,6 +606,8 @@ namespace Rosny_Bod_App
                     Connect_to_device2.IsEnabled = true;
                     Disconnect_from_device.Background = Brushes.Red;
                     Disconnect_from_device2.Background = Brushes.Red;
+                    Disconnect_from_device.IsEnabled = false;
+                    Disconnect_from_device2.IsEnabled = false;
                     Status.Text = "Neaktivní";
                     Status.Background = Brushes.LightGray;
                     break;
@@ -578,6 +624,8 @@ namespace Rosny_Bod_App
                         Disconnect_from_device2.Background = Brushes.Red;
                         Connect_to_device.IsEnabled = true;
                         Connect_to_device2.IsEnabled = true;
+                        Disconnect_from_device.IsEnabled = false;
+                        Disconnect_from_device2.IsEnabled = false;
                         Status.Text = "Neaktivní";
                         Status.Background = Brushes.LightGray;
                         break;
@@ -627,6 +675,7 @@ namespace Rosny_Bod_App
             ManualRequestedPowerNegative = 0;
             ManualRequestedPowerPositive = 0;
             manualPow.Text = "0";
+            ReqPow = 0;
             Auto_Messuring_Results.IsEnabled = true;
             if (ManualmodeActive)
             {
@@ -678,9 +727,35 @@ namespace Rosny_Bod_App
             }
             else
             {
-                RequestTemperatureManualText = "xx.xx";
-                RequestOK = false;
+                requested= requested.Replace(',', '.');
+                if (double.TryParse(requested, styles, culture, out Number))
+                {
+                    if (Number > 1)
+                    {
+                        if (Number < Report.EnvTempReport)
+                        {
+                            RequestTemperatureManualText = "OK potvrďte zápis";
+                            RequestOK = true;
+                        }
+                        else
+                        {
+                            RequestTemperatureManualText = "teplota > okolí";
+                            RequestOK = false;
+                        }
+                    }
+                    else
+                    {
+                        RequestTemperatureManualText = "Moc nízká teplota";
+                        RequestOK = false;
+                    }
+                }
+                else
+                {
+                    RequestTemperatureManualText = "Neplatné číslo";
+                    RequestOK = false;
+                }
             }
+
         }
 
         private void ReqConfirm_Click(object sender, RoutedEventArgs e)
@@ -705,7 +780,7 @@ namespace Rosny_Bod_App
             {
                 if (double.TryParse(requested, styles, culture, out Number))
                 {
-                    if (Number > -2)
+                    if (Number > 1)
                     {
                         if (Number < Report.EnvTempReport)
                         {
@@ -726,14 +801,39 @@ namespace Rosny_Bod_App
                 }
                 else
                 {
-                    RequestTemperatureManualText = "CHYBA";
+                    RequestTemperatureManualText = "Neplatné číslo";
                     RequestOK = false;
                 }
             }
             else
             {
-                RequestTemperatureManualText = "xx.xx";
-                RequestOK = false;
+                requested = requested.Replace(',', '.');
+                if (double.TryParse(requested, styles, culture, out Number))
+                {
+                    if (Number > 1)
+                    {
+                        if (Number < Report.EnvTempReport)
+                        {
+                            RequestTemperatureManualText = "OK potvrďte zápis";
+                            RequestOK = true;
+                        }
+                        else
+                        {
+                            RequestTemperatureManualText = "teplota > okolí";
+                            RequestOK = false;
+                        }
+                    }
+                    else
+                    {
+                        RequestTemperatureManualText = "Moc nízká teplota";
+                        RequestOK = false;
+                    }
+                }
+                else
+                {
+                    RequestTemperatureManualText = "Neplatné číslo";
+                    RequestOK = false;
+                }
             }
         }
 
@@ -747,7 +847,7 @@ namespace Rosny_Bod_App
             //automode assumed active
             Add_row2.IsEnabled = false;
             Remove_row2.IsEnabled = false;
-            Add_row.IsEnabled= false;
+            Add_row.IsEnabled = false;
             Remove_row.IsEnabled = false;
             wasExperimentRun = true;
             Auto_Messurement_Start.IsEnabled = false;
@@ -808,7 +908,13 @@ namespace Rosny_Bod_App
 
         private void Password_Confirm_Click(object sender, RoutedEventArgs e)
         {
-            if (Password_box.Text.ToString() == "dew point")
+            List<string> list = new List<string>();
+            list.Add("dew point");
+            list.Add("dewpoint");
+            list.Add("DEWPOINT");
+            list.Add("DEW POINT");
+
+            if (list.Contains(Password_box.Text.ToString().ToUpperInvariant()) )
             {
                 PasswordOk = true;
                 Password_box.Background = Brushes.Green;
@@ -816,7 +922,7 @@ namespace Rosny_Bod_App
             else
             {
                 PasswordOk = false;
-                if (Password_box.Text.ToString() != "dew point")
+                if (!list.Contains(Password_box.Text.ToString().ToUpperInvariant()))
                 {
                     Password_box.Background = Brushes.Red;
                 }
@@ -1111,6 +1217,7 @@ namespace Rosny_Bod_App
             int rozsah_max2 = 14;
             Controlsize = Convert.ToInt32(e.NewSize.Width - 800) * (rozsah_max - rozsah_min) / (1920 - 800) + rozsah_min;
             Controlsize2 = Convert.ToInt32((e.NewSize.Width - 800) * (rozsah_max2 - rozsah_min2) / (1920 - 800) + rozsah_min2);
+            Controlsize3 = Controlsize2 * 2;
             var heightfixtemp = Convert.ToInt32((e.NewSize.Height - 600) * (610 - 130) / (1080 - 600) + 130); //modifikace velikosti čítače naměřených hodnot
             var imageHeightFix = Convert.ToInt32((e.NewSize.Height - 600) * (975 - 500) / (1080 - 600) + 500);
             if (heightfixtemp <= 0)
@@ -1133,15 +1240,16 @@ namespace Rosny_Bod_App
         {
             if (Automatic_temp_control_ON.IsChecked == true && StopMessurementRequest == false && ManualmodeActive == false && AutomodeActive == false)
             {
-                if (IsLoaded) { 
-                Add_row2.IsEnabled = false;
-                Remove_row2.IsEnabled = false;
-                Add_row.IsEnabled = false;
-                Remove_row.IsEnabled = false;
-                Automode.ResetTemperatureMessurement();
-                AutomodeActive = true;
-                Request_temperature_manual.IsEnabled = false;
-                ReqConfirm.IsEnabled = false;
+                if (IsLoaded)
+                {
+                    Add_row2.IsEnabled = false;
+                    Remove_row2.IsEnabled = false;
+                    Add_row.IsEnabled = false;
+                    Remove_row.IsEnabled = false;
+                    Automode.ResetTemperatureMessurement();
+                    AutomodeActive = true;
+                    Request_temperature_manual.IsEnabled = false;
+                    ReqConfirm.IsEnabled = false;
                 }
             }
         }
@@ -1411,7 +1519,7 @@ namespace Rosny_Bod_App
                 WpfPlot1.Plot.XLabel("Vzorky [-]");
                 WpfPlot1.Plot.YLabel("Napětí Na Fotorezistoru [mV]");
                 WpfPlot1.Plot.Title("Graf Intenzity Osvětlení");
-                // WpfPlot1.Plot.SetAxisLimitsY(0, 3300);
+                WpfPlot1.Plot.SetAxisLimitsY(1000, 1750);
             }
             if (Graph_selector_1.SelectedIndex == 4)
             {
@@ -1438,6 +1546,7 @@ namespace Rosny_Bod_App
                 WpfPlot1.Plot.XLabel("Vzorky [-]");
                 WpfPlot1.Plot.YLabel("Teplota Chladiče [°C]");
                 WpfPlot1.Plot.Title("Graf Teploty Chladiče V Čase");
+                WpfPlot1.Plot.SetAxisLimitsY(0, 100);
             }
 
         }
@@ -1477,7 +1586,7 @@ namespace Rosny_Bod_App
                 WpfPlot2.Plot.XLabel("Vzorky [-]");
                 WpfPlot2.Plot.YLabel("Napětí Na Fotorezistoru [mV]");
                 WpfPlot2.Plot.Title("Graf Intenzity Osvětlení");
-                //WpfPlot2.Plot.SetAxisLimitsY(0, 3300);
+                WpfPlot1.Plot.SetAxisLimitsY(1000, 1750);
             }
             if (Graph_selector_2.SelectedIndex == 4)
             {
@@ -1504,6 +1613,7 @@ namespace Rosny_Bod_App
                 WpfPlot2.Plot.XLabel("Vzorky [-]");
                 WpfPlot2.Plot.YLabel("Teplota Chladiče [°C]");
                 WpfPlot2.Plot.Title("Graf Teploty Chladiče V Čase");
+                WpfPlot1.Plot.SetAxisLimitsY(0, 100);
             }
 
         }
@@ -1512,27 +1622,69 @@ namespace Rosny_Bod_App
         {
             var culture = CultureInfo.InvariantCulture;
             NumberStyles styles = NumberStyles.Number;
-            double temp;
-            if (double.TryParse(manualPow.Text, styles, culture, out temp))
-            {
-                if (temp < -4)
-                {
-                    RequestPowerManualText = "Hodnota chladícího výkonu je moc nízká!";
-                    EnableManualParse = false;
 
-                }
-                else if (temp > 100)
+            if (!manualPow.Text.Contains(","))
+            {
+                if (double.TryParse(manualPow.Text, styles, culture, out Number))
                 {
-                    RequestPowerManualText = "Hodnota chladícího výkonu je moc vysoká!";
-                    EnableManualParse = false;
+                    Number = Math.Round(Number, 2);
+                    if (Number >= -4)
+                    {
+                        if (Number <= 100)
+                        {
+                            PowerManualText = "OK potvrďte zápis";
+                            EnableManualParse = true;
+                        }
+                        else
+                        {
+                            PowerManualText = "Moc vysoký výkon";
+                            EnableManualParse = false;
+                        }
+                    }
+
+                    else
+                    {
+                        PowerManualText = "Moc nízký výkon";
+                        EnableManualParse = false;
+                    }
                 }
                 else
                 {
-                    RequestPowerManualText = "OK potvrďte zápis";
-                    EnableManualParse = true;
+                    PowerManualText = "Neplatné číslo";
+                    EnableManualParse = false;
                 }
+            }
+            else
+            {
+                manualPow.Text = manualPow.Text.Replace(',', '.');
+                if (double.TryParse(manualPow.Text, styles, culture, out Number))
+                {
+                    Number = Math.Round(Number, 2);
+                    if (Number > -4)
+                    {
+                        if (Number < 100)
+                        {
+                            PowerManualText = "OK potvrďte zápis";
+                            EnableManualParse = true;
+                        }
+                        else
+                        {
+                            PowerManualText = "Moc vysoký výkon";
+                            EnableManualParse = false;
+                        }
+                    }
 
-
+                    else
+                    {
+                        PowerManualText = "Moc nízký výkon";
+                        EnableManualParse = false;
+                    }
+                }
+                else
+                {
+                    PowerManualText = "Neplatné číslo";
+                    EnableManualParse = false;
+                }
             }
         }
 
@@ -1540,11 +1692,11 @@ namespace Rosny_Bod_App
         {
             var culture = CultureInfo.InvariantCulture;
             NumberStyles styles = NumberStyles.Number;
-            double ReqPow;
             double ReqPowRound;
-            if (double.TryParse(manualPow.Text, styles, culture, out ReqPow) == true && EnableManualParse == true)
+            double tempnumber;
+            if (double.TryParse(manualPow.Text, styles, culture, out tempnumber) == true && EnableManualParse == true)
             {
-
+                ReqPow = Math.Round(tempnumber, 2);
                 ReqPowRound = Math.Round(ReqPow / 100 * 255);
                 if (ReqPowRound < 0)
                 {
@@ -1611,62 +1763,62 @@ namespace Rosny_Bod_App
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             // Updating the Label which displays the current second
-
-            Teplota1.UpdateGraphData(Report.PT100TempSence);
-            Vnejsi_Teplota1.UpdateGraphData(Report.EnvTempReport);
-            Atmos_press1.UpdateGraphData(Report.EnvPressureReport);
-            Osvetleni1.UpdateGraphData(Report.LightSensorReport_mV);
-            Proud1.UpdateGraphData(Report.AmperageShow);
-            Vykon1.UpdateGraphData(Report.WattageShow);
-            Teplota_chladice1.UpdateGraphData(Report.CoolerTempSence);
-
-            App.Current.Dispatcher.Invoke(() =>
+            if (ComPort.SerialLink.IsOpen)
             {
+                Teplota1.UpdateGraphData(Report.PT100TempSence);
+                Vnejsi_Teplota1.UpdateGraphData(Report.EnvTempReport);
+                Atmos_press1.UpdateGraphData(Report.EnvPressureReport);
+                Osvetleni1.UpdateGraphData(Report.LightSensorReport_mV);
+                Proud1.UpdateGraphData(Report.AmperageShow);
+                Vykon1.UpdateGraphData(Report.WattageShow);
+                Teplota_chladice1.UpdateGraphData(Report.CoolerTempSence);
+
+                App.Current.Dispatcher.Invoke(() =>
+                {
 
                 #region Graph_Update
-                GraphSelect();
-                GraphSelect2();
-                WpfPlot2.Refresh();
-                WpfPlot2.Render();
-                WpfPlot1.Refresh();
-                WpfPlot1.Render();
+                    GraphSelect();
+                    GraphSelect2();
+                    WpfPlot2.Refresh();
+                    WpfPlot2.Render();
+                    WpfPlot1.Refresh();
+                    WpfPlot1.Render();
                 #endregion
                 #region Záznam komunikace 
-                comm_field.AppendText(Report.LastMessage + '\r');
-                comm_field.AppendText(ComPort.LastMsg + '\r');
-                if (com_updater > Heightfix2 / 40)
-                {
-                    comm_field.SelectAll();
-                    comm_field.Selection.Text = "";
-                    com_updater = 0;
-                }
-                com_updater++;
+
+                    comm_field.AppendText(Report.LastMessage + '\r');
+                    comm_field.AppendText(ComPort.LastMsg + '\r');
+                    if (com_updater > Heightfix2 / 40)
+                    {
+                        comm_field.SelectAll();
+                        comm_field.Selection.Text = "";
+                        com_updater = 0;
+                    }
+                    com_updater++;
                 #endregion
                 #region Stoping_States
-                if (StopMessurementRequest && MessurementStopStates == 0)
-                {
-                    Status.Text = "Stabilizuji teplotu regulátorem";
-                    Status.Background = Brushes.LightGreen;
-                }
-                if (StopMessurementRequest && MessurementStopStates == 1)
-                {
-                    Status.Text = "Chladím " + Math.Abs(60 - Atimer.Difference.TotalSeconds).ToString("F2", CultureInfo.CurrentCulture) + "s";
-                    Status.Background = Brushes.LightGreen;
-                }
-                if (!StopMessurementRequest && !RegulatorActive && !AutomodeActive && !ManualmodeActive)
-                {
-                    Status.Text = "Neaktivní";
-                    Status.Background = Brushes.LightGray;
-                    Auto_Messurement_Start.IsEnabled = true;
-                    Manual_Messurement_Start.IsEnabled = true;
-                    Disconnect_from_device.IsEnabled = true;
-                }
+                    if (StopMessurementRequest && MessurementStopStates == 0)
+                    {
+
+
+                        Status.Text = "Stabilizuji teplotu regulátorem";
+                        Status.Background = Brushes.LightGreen;
+                    }
+                    if (StopMessurementRequest && MessurementStopStates == 1)
+                    {
+                        Status.Text = "Chladím " + Math.Abs(60 - Atimer.Difference.TotalSeconds).ToString("F2", CultureInfo.CurrentCulture) + "s";
+                        Status.Background = Brushes.LightGreen;
+                    }
+                    if (!StopMessurementRequest && !RegulatorActive && !AutomodeActive && !ManualmodeActive)
+                    {
+                        Status.Text = "Neaktivní";
+                        Status.Background = Brushes.LightGray;
+                        Auto_Messurement_Start.IsEnabled = true;
+                        Manual_Messurement_Start.IsEnabled = true;
+                    }
                 #endregion
-            });
-
-
-
-
+                });
+            }
 
             // Forcing the CommandManager to raise the RequerySuggested event
             CommandManager.InvalidateRequerySuggested();

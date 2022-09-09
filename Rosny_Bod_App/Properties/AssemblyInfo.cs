@@ -8,7 +8,7 @@ using System.Windows;
 [assembly: AssemblyTitle("Rosny_Bod_App")]
 [assembly: AssemblyDescription("Aplikace pro měření rosného bodu")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("TUL")]
 [assembly: AssemblyProduct("Rosny_Bod_App")]
 [assembly: AssemblyCopyright("Copyright © CC BY-NC-SA 4.0 Pavel Vaščuk  2022")]
 [assembly: AssemblyTrademark("")]
@@ -49,3 +49,4 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: Guid("6d75cb84-dbb5-4f4a-9d61-0e6d4c626fbb")]

@@ -28,11 +28,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <SupportUrl>https://github.com/GimliCZ/Rosny_bod_update</SupportUrl>
-    <ErrorReportUrl>https://github.com/GimliCZ/Rosny_bod_update</ErrorReportUrl>
+    <SupportUrl>https://github.com/GimliCZ/</SupportUrl>
+    <ErrorReportUrl>https://github.com/GimliCZ/</ErrorReportUrl>
     <TargetCulture>cs-CZ</TargetCulture>
     <ProductName>Rosny bod</ProductName>
     <PublisherName>Pavel Vaščuk</PublisherName>
+    <DisallowUrlActivation>true</DisallowUrlActivation>
     <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
@@ -48,8 +49,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>
-    </CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>Rosny_Bod_App1.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -61,8 +61,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>
-    </CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Rosnybod.ico</ApplicationIcon>
@@ -233,6 +232,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Rosny_Bod_App.ruleset" />
+    <None Include="Rosny_Bod_App1.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

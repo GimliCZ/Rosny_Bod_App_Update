@@ -109,7 +109,7 @@
                                     <TextBox Grid.Row="5" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Pressure_auto" Text="{Binding Report.EnvPressureReport}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4" Margin="5 0 5 0" />
                                     <Label Content="Fotoresistor [mV]" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
                                     <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4"  Grid.Row="7" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Light_auto" Text="{Binding Report.LightSensorReport_mV}" Margin="5 0 5 0" />
-                                    <Label Content="Požadovaná teplota"  HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
+                                    <Label Content="Požadovaná teplota [°C]"  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" Grid.ColumnSpan="2"/>
                                     <Label Content="Proud [A]" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
 
                                     <TextBox Grid.Row="1" Grid.Column="3"  IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.AmperageShow}" VerticalAlignment="Center"  Padding="0 4 0 4" Margin="5 0 5 0" />
@@ -121,12 +121,12 @@
                                     <Label Grid.Row="6" Grid.Column="3" Content="Teplota chladiče [°C]" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
                                     <TextBox Grid.Row="7" Grid.Column="3" IsReadOnly="True" IsEnabled="False" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.CoolerTempSencetext}" VerticalAlignment="Center"  Padding="0 4 0 4" Margin="5 0 5 0" />
 
-                                    <Label Content="Zapsaná teplota" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
-                                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4"  Grid.Row="5" Grid.Column="1" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Set_Temperature" Text="{Binding RequestedValue}" Margin="10 0 10 0" />
+                                    <Label Content="Zapsaná teplota [°C]" Grid.Row="8" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" Grid.ColumnSpan="2"/>
+                                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0 4 0 4"  Grid.Row="9" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Set_Temperature" Text="{Binding RequestedValue}" Margin="10 0 10 0" Grid.ColumnSpan="2" Grid.RowSpan="2" FontSize="{Binding Controlsize3}" VerticalContentAlignment="Center" />
 
                                     <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4"  Grid.Row="5" Grid.Column="0"  x:Name="Request_temperature_manual" TextWrapping="Wrap" Text="{Binding RequestedString}" IsEnabled="False" Margin="0 0 10 0" TextChanged="Request_temperature_manual_Text_Changed" IsKeyboardFocusWithinChanged="Request_temperature_manual_IsKeyboardFocusWithinChanged" />
                                     <Rectangle  Grid.Row="6" Grid.Column="0"  Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stroke="Gray" Margin="0 1 10 1" />
-                                    <Label Grid.Row="6" Grid.Column="0" Content="{Binding RequestTemperatureManualText}" Grid.ColumnSpan="2" x:Name="lbl1" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0 1 10 1" FontSize="9.8" />
+                                    <Label Grid.Row="6" Grid.Column="0" Content="{Binding RequestTemperatureManualText}" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0 1 10 1" FontSize="9.8" />
                                     <Button Content="Potvrdit požadovanou teplotu" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" x:Name="ReqConfirm" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="ReqConfirm_Click" IsEnabled="False" Margin="0 2 10 2" FontSize="{Binding Controlsize2}"/>
 
 
@@ -244,9 +244,14 @@
                                     <Label Content="Trans. výkon [W]" Grid.Row="4" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
                                     <TextBox Grid.Row="5" Grid.Column="3"  IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.CoolingShow}" VerticalAlignment="Center" Margin="5 0 5 0" Padding="0 4 0 4"/>
                                     <Label Content="Požadovaný výkon [%] (-4 až 100)" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Grid.ColumnSpan="2" Padding="0 2 0 2" />
-                                    <TextBox Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" x:Name="manualPow" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="0" TextChanged="manualPow_TextChanged" IsEnabled="False" Padding="0 4 0 4" Margin="0 0 10 0" />
+
+                                    <TextBox Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" x:Name="manualPow" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextChanged="manualPow_TextChanged" IsEnabled="False" Padding="0 4 0 4" Margin="0 0 10 0"/>
                                     <Rectangle  Grid.Row="6" Grid.Column="0"  Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Stroke="Gray" Margin="0 1 10 1" />
-                                    <Label Grid.Row="6" Grid.Column="0" Content="{Binding RequestPowerManualText}" Grid.ColumnSpan="2" x:Name="lbl2" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0 1 10 1" FontSize="9.8" />
+                                    <Label Grid.Row="6" Grid.Column="0" Content="{Binding PowerManualText}" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0 1 10 1" FontSize="9.8" />
+                                    
+                                    <Label Content="Zapsaný výkon [%]" Grid.Row="8" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" Grid.ColumnSpan="2"/>
+                                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0 4 0 4"  Grid.Row="9" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Set_Power" Text="{Binding ReqPow}" Margin="10 0 10 0" Grid.ColumnSpan="2" Grid.RowSpan="2" FontSize="{Binding Controlsize3}" VerticalContentAlignment="Center" />
+                                    
                                     <Button Content="Potvrdit požadovaný výkon" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" x:Name="ReqPowConfirm" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="ReqPowConfirm_Click" Margin="0 2 10 2" FontSize="{Binding Controlsize2}" IsEnabled="False"/>
                                     <Label Grid.Row="6" Grid.Column="3" Content="Teplota chladiče [°C]" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
                                     <TextBox Grid.Row="7" Grid.Column="3" IsReadOnly="True" IsEnabled="False" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.CoolerTempSencetext}" VerticalAlignment="Center" Margin="5 0 5 0" Padding="0 4 0 4"/>
@@ -299,8 +304,8 @@
                                 <RowDefinition Height="15*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="1.2*" />
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0" Grid.Row="1" x:Name="magic" HorizontalAlignment="Left" VerticalAlignment="Top" Width="10" Height="10" BorderThickness="0" Click="Magic_Click"/>
                             <Grid Grid.Row="0" Grid.Column="0">
@@ -309,9 +314,9 @@
                                     <ColumnDefinition Width="2*" />
                                     <ColumnDefinition Width="1.5*" />
                                 </Grid.ColumnDefinitions>
-                                <TextBox  Grid.Column="1" Text="Malým a s mezerou"  x:Name="Password_box" Margin="5 0 5 0" VerticalAlignment="Center" />
-                                <Label Content="Heslo" Grid.Column="0" Padding="10 2 10 2" />
-                                <Button Content="Potvrdit heslo" Grid.Column="2"  x:Name="Password_Confirm" VerticalAlignment="Center" Padding="10 2 10 2" Click="Password_Confirm_Click" />
+                                <TextBox  Grid.Column="1" Text=""  x:Name="Password_box" Margin="5 0 5 0" VerticalAlignment="Center" />
+                                <Label Content="Rosný bod anglicky:" Grid.Column="0" Padding="10 2 10 2" />
+                                <Button Content="Odemknout" Grid.Column="2"  x:Name="Password_Confirm" VerticalAlignment="Center" Padding="10 2 10 2" Click="Password_Confirm_Click" />
 
                             </Grid>
                            
