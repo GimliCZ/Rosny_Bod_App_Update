@@ -300,6 +300,7 @@ namespace Rosny_Bod_App
                 dispatcherTimer.Start();
                 manualPow.KeyDown += new KeyEventHandler(ManualPow_KeyDown);
                 Request_temperature_manual.KeyDown += new KeyEventHandler(Request_temperature_manual_KeyDown);
+                Password_box.KeyDown += new KeyEventHandler(Password_box_KeyDown);
 
 
                 DataContext = this;
@@ -319,6 +320,12 @@ namespace Rosny_Bod_App
             if (e.Key == Key.Enter)
             {
                 ReqPowConfirm_Click(this, new RoutedEventArgs());
+            }
+        }
+        private void Password_box_KeyDown(object sender, KeyEventArgs e){
+            if (e.Key == Key.Enter)
+            {
+                Password_Confirm_Click(this, new RoutedEventArgs());
             }
         }
 
@@ -1823,7 +1830,6 @@ namespace Rosny_Bod_App
             // Forcing the CommandManager to raise the RequerySuggested event
             CommandManager.InvalidateRequerySuggested();
         }
-
     }
 }
 #endregion

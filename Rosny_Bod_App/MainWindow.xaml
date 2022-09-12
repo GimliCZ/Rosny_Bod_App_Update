@@ -314,7 +314,7 @@
                                     <ColumnDefinition Width="2*" />
                                     <ColumnDefinition Width="1.5*" />
                                 </Grid.ColumnDefinitions>
-                                <TextBox  Grid.Column="1" Text=""  x:Name="Password_box" Margin="5 0 5 0" VerticalAlignment="Center" />
+                                <TextBox  Grid.Column="1" Text=""  x:Name="Password_box" Margin="5 0 5 0" VerticalAlignment="Center" KeyDown="Password_box_KeyDown"/>
                                 <Label Content="Rosný bod anglicky:" Grid.Column="0" Padding="10 2 10 2" />
                                 <Button Content="Odemknout" Grid.Column="2"  x:Name="Password_Confirm" VerticalAlignment="Center" Padding="10 2 10 2" Click="Password_Confirm_Click" />
 
