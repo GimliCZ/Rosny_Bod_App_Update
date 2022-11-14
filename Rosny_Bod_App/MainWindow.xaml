@@ -109,7 +109,7 @@
                                     <TextBox Grid.Row="5" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Pressure_auto" Text="{Binding Report.EnvPressureReport}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4" Margin="5 0 5 0" />
                                     <Label Content="Fotoresistor [mV]" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
                                     <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4"  Grid.Row="7" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Light_auto" Text="{Binding Report.LightSensorReport_mV}" Margin="5 0 5 0" />
-                                    <Label Content="Požadovaná teplota [°C]"  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" Grid.ColumnSpan="2"/>
+                                    <Label Content="Požadovaná teplota [°C]"  HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" Grid.ColumnSpan="2"/>
                                     <Label Content="Proud [A]" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
 
                                     <TextBox Grid.Row="1" Grid.Column="3"  IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.AmperageShow}" VerticalAlignment="Center"  Padding="0 4 0 4" Margin="5 0 5 0" />

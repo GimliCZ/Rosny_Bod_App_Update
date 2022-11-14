@@ -886,7 +886,7 @@ namespace Rosny_Bod_App
                 MessageBox.Show("Zařízení není připojeno.");
                 return;
             }
-
+            Automatic_temp_control_ON.IsChecked = true;
             Automatic_temp_control_ON.IsEnabled = false;
             ReqConfirm.IsEnabled = false;
             Request_temperature_manual.IsEnabled = false;
@@ -1593,7 +1593,7 @@ namespace Rosny_Bod_App
                 WpfPlot2.Plot.XLabel("Vzorky [-]");
                 WpfPlot2.Plot.YLabel("Napětí Na Fotorezistoru [mV]");
                 WpfPlot2.Plot.Title("Graf Intenzity Osvětlení");
-                WpfPlot1.Plot.SetAxisLimitsY(1000, 1750);
+                WpfPlot2.Plot.SetAxisLimitsY(1000, 1750);
             }
             if (Graph_selector_2.SelectedIndex == 4)
             {
@@ -1620,7 +1620,7 @@ namespace Rosny_Bod_App
                 WpfPlot2.Plot.XLabel("Vzorky [-]");
                 WpfPlot2.Plot.YLabel("Teplota Chladiče [°C]");
                 WpfPlot2.Plot.Title("Graf Teploty Chladiče V Čase");
-                WpfPlot1.Plot.SetAxisLimitsY(0, 100);
+                WpfPlot2.Plot.SetAxisLimitsY(0, 100);
             }
 
         }
