@@ -525,7 +525,7 @@ namespace Rosny_Bod_App
                                     App.Current.Dispatcher.Invoke(() => //udělej záznam do tabulky record
                                     {
                                         Record.Add(new DetectionRecord(Report.PT100TempSence, Report.EnvTempReport, Report.EnvPressureReport, DateTime.Now));
-                                        Export_list(); ;
+                                        Export_list();
                                     });
                                     // }
                                 }
@@ -1155,6 +1155,7 @@ namespace Rosny_Bod_App
         private void Export_list()
         {
             string data = "";
+            File_Record.File_Clear();
             foreach (var DetectionRecord in Record)
             {
                 data += DetectionRecord.Time.ToString("f", new CultureInfo("en-GB")) + ";" + DetectionRecord.ENV_Temperature.ToString(CultureInfo.InvariantCulture) + ";" + DetectionRecord.PT100_Temperature.ToString(CultureInfo.InvariantCulture) + ";" + DetectionRecord.ENV_Pressure.ToString(CultureInfo.InvariantCulture) + ";" + DetectionRecord.Humidity.ToString(CultureInfo.InvariantCulture) + System.Environment.NewLine;

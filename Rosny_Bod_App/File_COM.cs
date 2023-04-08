@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace Rosny_Bod_App
@@ -42,7 +43,6 @@ namespace Rosny_Bod_App
 
         public string Read_Data() {
            
-                
             string data =   read.ReadToEnd();
             read.Close();
             if (read != null)
@@ -59,13 +59,12 @@ namespace Rosny_Bod_App
 
             try
             {
-                write.WriteAsync(data);
+                write.Write(data);
                 write.Flush();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-
             }
         }
 
@@ -82,6 +81,10 @@ namespace Rosny_Bod_App
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        public void File_Clear() {
+            File.WriteAllText(path, string.Empty);
         }
 
         public void Close()
