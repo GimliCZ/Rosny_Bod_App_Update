@@ -140,7 +140,7 @@ namespace Rosny_Bod_App
             {
                 Lightbackground = Convert_to_double(Light_Sence); //měřené pozadí
                 Light_low = Lightbackground + Low_light_Const; // hodnota navrácení se k ochlazování
-                Light_high = Lightbackground + High_light_Const; // hodnota navráceníse k ohřívání
+                Light_high = Lightbackground + High_light_Const; // hodnota navrácení se k ohřívání
                 Inicial_temperature = Math.Round(Temperature_env, 1); //výchozí teplota okolního prostředí
                 if (Inicial_temperature == 0)
                 {

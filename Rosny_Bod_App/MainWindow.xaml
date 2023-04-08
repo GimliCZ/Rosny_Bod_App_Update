@@ -107,7 +107,7 @@
                                     <TextBox HorizontalAlignment="Stretch" Grid.Column="2" Grid.Row="3" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Envtemp_auto" Text="{Binding Report.EnvTempReport}" VerticalAlignment="Center" Padding="0 4 0 4" Margin="5 0 5 0" />
                                     <Label Content="Atmos. tlak [hPa]" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
                                     <TextBox Grid.Row="5" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Pressure_auto" Text="{Binding Report.EnvPressureReport}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4" Margin="5 0 5 0" />
-                                    <Label Content="Fotoresistor [mV]" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
+                                    <Label Content="Napětí fotoresistoru  [mV]" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
                                     <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Padding="0 4 0 4"  Grid.Row="7" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Light_auto" Text="{Binding Report.LightSensorReport_mV}" Margin="5 0 5 0" />
                                     <Label Content="Požadovaná teplota [°C]"  HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" Grid.ColumnSpan="2"/>
                                     <Label Content="Proud [A]" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
@@ -144,7 +144,7 @@
                                         <RowDefinition Height="25" />
                                     </Grid.RowDefinitions>
                                     <WpfPlot x:Name="WpfPlot1" Margin="0,0,0,5" Grid.RowSpan="2"/>
-                                    <ComboBox x:Name="Graph_selector_1" Grid.Row="2"  HorizontalAlignment="Left"  FontSize="{Binding Controlsize2}" Width="120" SelectionChanged="Graph_selector_1_SelectionChanged" IsEnabled="False">
+                                    <ComboBox x:Name="Graph_selector_1" Grid.Row="2"  HorizontalAlignment="Left"  FontSize="{Binding Controlsize2}" Width="130" SelectionChanged="Graph_selector_1_SelectionChanged" IsEnabled="False">
                                         <ComboBoxItem Content="Teplota zrcadla" />
                                         <ComboBoxItem Content="Teplota okolí" />
                                         <ComboBoxItem Content="Atmosférický tlak" />
@@ -160,10 +160,10 @@
                                 <DataGrid Grid.Row="1" Height="{Binding Heightfix}" FontSize="{Binding Controlsize2}" x:Name="Auto_Messuring_Results" AutoGenerateColumns="False" ItemsSource="{Binding Record}" Margin="10,10,10,10" Padding="10,10,10,10" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" >
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Čas" Binding="{Binding Time,StringFormat=\{0:dd.MM.yy HH:mm:ss\}}" Width="160" />
-                                        <DataGridTextColumn Header="Vnější teplota" Binding="{Binding ENV_Temperature}" Width="160" />
-                                        <DataGridTextColumn Header="Vnitřní teplota" Binding="{Binding PT100_Temperature}"  Width="160" />
-                                        <DataGridTextColumn Header="Tlak" Binding="{Binding ENV_Pressure}" Width="160" />
-                                        <DataGridTextColumn Header="Vlhkost" Binding="{Binding Humidity}" Width="160" />
+                                        <DataGridTextColumn Header="Teplota okolí [°C]" Binding="{Binding ENV_Temperature}" Width="160" />
+                                        <DataGridTextColumn Header="Teplota zrcadla [°C]" Binding="{Binding PT100_Temperature}"  Width="160" />
+                                        <DataGridTextColumn Header="Tlak [hPa]" Binding="{Binding ENV_Pressure}" Width="160" />
+                                        <DataGridTextColumn Header="Vlhkost [%]" Binding="{Binding Humidity}" Width="160" />
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </StackPanel>
@@ -235,7 +235,7 @@
                                     <TextBox HorizontalAlignment="Stretch" Grid.Column="2" Grid.Row="3" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Envtemp" Text="{Binding Report.EnvTempReport}" VerticalAlignment="Center" Margin="5 0 5 0" Padding="0 4 0 4"/>
                                     <Label Content="Atmos. tlak [hPa]" Grid.Row="4" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
                                     <TextBox Grid.Row="5" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Pressure" Text="{Binding Report.EnvPressureReport}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5 0 5 0" Padding="0 4 0 4"/>
-                                    <Label Content="Fotoresistor [mV]" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
+                                    <Label Content="Napětí fotoresistoru  [mV]" Grid.Row="6" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2" />
                                     <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.Row="7" Grid.Column="2" IsReadOnly="True" IsEnabled="false" TextWrapping="Wrap" x:Name="Light" Text="{Binding Report.LightSensorReport_mV}" Margin="5 0 5 0" Padding="0 4 0 4"/>
                                     <Label Content="Proud [A]" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{Binding Controlsize2}" Padding="0 2 0 2"/>
                                     <TextBox Grid.Row="1" Grid.Column="3"  IsEnabled="false" IsReadOnly="True" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="{Binding Report.AmperageShow}" VerticalAlignment="Center" Margin="5 0 5 0" Padding="0 4 0 4"/>
@@ -269,7 +269,7 @@
                                         <RowDefinition Height="300" />
                                         <RowDefinition Height="25" />
                                     </Grid.RowDefinitions>
-                                    <ComboBox x:Name="Graph_selector_2" Grid.Row="2" HorizontalAlignment="Left" Width="120" SelectionChanged="Graph_selector_2_SelectionChanged" IsEnabled="False">
+                                    <ComboBox x:Name="Graph_selector_2" Grid.Row="2" HorizontalAlignment="Left" Width="130" SelectionChanged="Graph_selector_2_SelectionChanged" IsEnabled="False">
                                         <ComboBoxItem Content="Teplota zrcadla" />
                                         <ComboBoxItem Content="Teplota okolí" />
                                         <ComboBoxItem Content="Atmosférický tlak" />
@@ -286,10 +286,10 @@
                                 <DataGrid Grid.Row="1" Height="{Binding Heightfix}" FontSize="{Binding Controlsize2}" x:Name="Auto_Messuring_Results2" AutoGenerateColumns="False" ItemsSource="{Binding Record}" Margin="10,10,10,10" Padding="10,10,10,10" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" >
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Čas" Binding="{Binding Time,StringFormat=\{0:dd.MM.yy HH:mm:ss\}}" Width="160" />
-                                        <DataGridTextColumn Header="Vnější teplota" Binding="{Binding ENV_Temperature}" Width="160" />
-                                        <DataGridTextColumn Header="Vnitřní teplota" Binding="{Binding PT100_Temperature}"  Width="160" />
-                                        <DataGridTextColumn Header="Tlak" Binding="{Binding ENV_Pressure}" Width="160" />
-                                        <DataGridTextColumn Header="Vlhkost" Binding="{Binding Humidity}" Width="160" />
+                                        <DataGridTextColumn Header="Teplota okolí [°C]" Binding="{Binding ENV_Temperature}" Width="160" />
+                                        <DataGridTextColumn Header="Teplota zrcadla [°C]" Binding="{Binding PT100_Temperature}"  Width="160" />
+                                        <DataGridTextColumn Header="Tlak [hPa]" Binding="{Binding ENV_Pressure}" Width="160" />
+                                        <DataGridTextColumn Header="Vlhkost [%]" Binding="{Binding Humidity}" Width="160" />
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </StackPanel>
@@ -380,9 +380,9 @@
                                 <TextBox Grid.Row="2" Grid.Column="1" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="Td_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding HBridgeControl.Td}" VerticalAlignment="Center" Margin="0 0 20 0"/>
                                 <Button x:Name="Run_fan" Click="Run_fan_Click" Grid.Column="6" Grid.Row="1" Margin="5" Grid.RowSpan="2" Content="Spustit ventilátor" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  FontSize="{Binding Controlsize2}" />
                                 <Button x:Name="Apply" Grid.Row="4" Grid.Column="6" Content="Aplikovat změny" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="Apply_Click" FontSize="{Binding Controlsize2}" Margin="5" Grid.RowSpan="2"/>
-                                <Label Grid.Row="1" Grid.Column="4" Content="Hranice chlazení [mV]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <Label Grid.Row="1" Grid.Column="4" Content="Fotoresistor - RB zanikl [mV]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
                                 <TextBox Grid.Row="1" Grid.Column="5" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="Low_Light_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding Automode.Low_light_Const}" VerticalAlignment="Center" Margin="0 0 20 0"/>
-                                <Label Grid.Row="2" Grid.Column="4" Content="Hranice zahřívání [mV]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
+                                <Label Grid.Row="2" Grid.Column="4" Content="Fotoresistor - RB detekován [mV]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
                                 <TextBox Grid.Row="2" Grid.Column="5" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="High_Light_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding Automode.High_light_Const}" VerticalAlignment="Center" Margin="0 0 20 0"/>
                                 <Label Grid.Row="3" Grid.Column="4" Content="Zpoždění náběhu [ticks]" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="{Binding Controlsize2}" />
                                 <TextBox Grid.Row="3" Grid.Column="5" IsReadOnly="{Binding NotReadableVariables}" IsEnabled="{Binding PasswordOk}" x:Name="speed_TextBox" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding Automode.Speed_Const}" VerticalAlignment="Center" Margin="0 0 20 0"/>

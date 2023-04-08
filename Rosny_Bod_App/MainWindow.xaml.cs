@@ -247,7 +247,7 @@ namespace Rosny_Bod_App
                 File_Log = new File_COM("Datalog" + CurrentDate + ".csv", "Log", true);
                 File_Record = new File_COM("Záznam" + CurrentDate + ".csv", "Records", false);
 
-                File_Log.Add_Data("Bezpecnostni bity; Napeti na fotorezistoru [mV]; Teplota venku [°C]; Tlak venku [HPa]; Proud [A]; Teplota Chladice [°C]; Teplota Zrcadla [°C]; Hodnota (D)erivacniho zasahu Regulatoru; Hodnota (I)ntegracniho zasahu Regulatoru; Hodnota (P)roporcionalniho zasahu Regulatoru; Celkovy zasah Regulatoru \r");
+                File_Log.Add_Data("Bezpecnostni bity; Napeti na fotorezistoru [mV]; Teplota okoli [°C]; Tlak venku [HPa]; Proud [A]; Teplota Chladice [°C]; Teplota Zrcadla [°C]; Hodnota (D)erivacniho zasahu Regulatoru; Hodnota (I)ntegracniho zasahu Regulatoru; Hodnota (P)roporcionalniho zasahu Regulatoru; Celkovy zasah Regulatoru \r");
                 File_Record.Add_Data("Datum;Vnejsi teplota [°C];Vnitrni teplota [°C];Tlak [hPa];Relativni vlhkost [%]\r");
 
                 Graph_selector_1.SelectedIndex = 0;
