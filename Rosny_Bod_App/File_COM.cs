@@ -31,8 +31,13 @@ namespace Rosny_Bod_App
         }
         public File_COM(string filename, string foldername)
         {
-            FileStream file = new FileStream(current_path + "\\" + foldername + "\\" + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-            read = new StreamReader(file, Encoding.GetEncoding(1252));
+            if (!Directory.Exists(current_path + "\\" + foldername + "\\"))
+            {
+                Directory.CreateDirectory(current_path + "\\" + foldername + "\\");
+            }
+                FileStream file = new FileStream(current_path + "\\" + foldername + "\\" + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                read = new StreamReader(file, Encoding.GetEncoding(1252));
+
         }
 
         public string Read_Data() {
