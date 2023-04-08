@@ -1,0 +1,10 @@
+-COM_adresa:COM1
+Čas poklesu teploty za n ticků (Stav náběhu)-Speed_Const:10
+Čas poklesu teploty za n ticků (Stav měření)-Speed2_Const:300
+Offset od světelného pozadí(zahřívání)-Low_light_Const:32.27
+Offset od světelného pozadí(chlazení)-High_light_Const:96.68
+Náběhový krok změny teploty-Inicialstep:0.3
+Měřící krok změny teploty-Messuringstep:0.05
+Proporcionální konstanta závislá na čase-R0:80
+Derivační konstanta závislá na čase-Td:0.002
+Integrační konstanta závislá na čase-Ti:14

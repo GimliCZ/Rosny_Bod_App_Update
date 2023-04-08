@@ -76,16 +76,21 @@ Integrační konstanta závislá na čase-Ti:14";
 
         public void Createfile(string filename, string foldername)
         {
-            var file = File.Create(current_path + "\\" + foldername + "\\" + filename);
-            file.Close();
+            try
+            {
+                var file = File.Create(current_path + "\\" + foldername + "\\" + filename);
+                file.Close();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         public void Generate_Options()
         {
             Create_folder(slozka);
-            Createfile("Options.cfg","Settings");
-
-            soubory.Add_Data(data);
+            File.Copy(current_path +"\\"+ "Options.bak", current_path + "\\" + slozka + "\\" + "Options.cfg",true);
         }
         public bool ReadOptions()
         {
