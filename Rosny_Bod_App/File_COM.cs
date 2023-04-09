@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Rosny_Bod_App
@@ -27,7 +26,7 @@ namespace Rosny_Bod_App
                 mode = FileMode.Truncate;
             }
             path = current_path + "\\" + foldername + "\\" + filename;
-            FileStream file = new FileStream(path, mode, FileAccess.Write, FileShare.Delete);
+            file = new FileStream(path, mode, FileAccess.Write, FileShare.Delete);
             write = new StreamWriter(file, Encoding.GetEncoding(1252), 1024, true);
         }
         public File_COM(string filename, string foldername)
@@ -36,7 +35,7 @@ namespace Rosny_Bod_App
             {
                 Directory.CreateDirectory(current_path + "\\" + foldername + "\\");
             }
-                FileStream file = new FileStream(current_path + "\\" + foldername + "\\" + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                file = new FileStream(current_path + "\\" + foldername + "\\" + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
                 read = new StreamReader(file, Encoding.GetEncoding(1252));
 
         }
@@ -53,7 +52,13 @@ namespace Rosny_Bod_App
         public void Add_Data(string data) //Zapiš do souboru data, ( s možností přepisu )
         {
             if (!File.Exists(path)) {
-                FileStream file = new FileStream(path, mode, FileAccess.Write, FileShare.Delete);
+                file = new FileStream(path, mode, FileAccess.Write, FileShare.Delete);
+                write = new StreamWriter(file, Encoding.GetEncoding(1252), 1024, true);
+            }
+            if (mode == FileMode.Truncate)
+            {
+                file.Close();
+                file = new FileStream(path, mode, FileAccess.Write, FileShare.Delete);
                 write = new StreamWriter(file, Encoding.GetEncoding(1252), 1024, true);
             }
 
@@ -81,10 +86,6 @@ namespace Rosny_Bod_App
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        public void File_Clear() {
-            File.WriteAllText(path, string.Empty);
         }
 
         public void Close()

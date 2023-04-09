@@ -8,3 +8,4 @@ Měřící krok změny teploty-Messuringstep:0.05
 Proporcionální konstanta závislá na čase-R0:80
 Derivační konstanta závislá na čase-Td:0.002
 Integrační konstanta závislá na čase-Ti:14
+Ochrana proti přehřatí-isOverTempProtOff:false

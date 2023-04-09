@@ -1,6 +1,7 @@
 ﻿using Nametagshow;
 using PropertyChanged;
 using ScottPlot;
+using ScottPlot.Drawing.Colormaps;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +10,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -229,6 +229,21 @@ namespace Rosny_Bod_App
         public Window2 win3;
         public int Refresh_delay = 90;
         public double ReqPow { get; set; } = 0;
+        public int DelimeterState { get; set; } = 0;
+
+        public char delimeter { get; set; } = ';';
+
+        public bool filesInicialized { get; set; } = false;
+
+        private List<string> listOfNamesLogData = new List<string>();
+
+        private List<string> listOfNamesRecord = new List<string>();
+
+        public CultureInfo currentCulture = CultureInfo.CurrentCulture;
+
+        public bool isOverTempProtOff = false;
+
+
 
         public MainWindow()
         {
@@ -246,9 +261,6 @@ namespace Rosny_Bod_App
 
                 File_Log = new File_COM("Datalog" + CurrentDate + ".csv", "Log", true);
                 File_Record = new File_COM("Záznam" + CurrentDate + ".csv", "Records", false);
-
-                File_Log.Add_Data("Bezpecnostni bity; Napeti na fotorezistoru [mV]; Teplota okoli [°C]; Tlak venku [HPa]; Proud [A]; Teplota Chladice [°C]; Teplota Zrcadla [°C]; Hodnota (D)erivacniho zasahu Regulatoru; Hodnota (I)ntegracniho zasahu Regulatoru; Hodnota (P)roporcionalniho zasahu Regulatoru; Celkovy zasah Regulatoru \r");
-                File_Record.Add_Data("Datum;Vnejsi teplota [°C];Vnitrni teplota [°C];Tlak [hPa];Relativni vlhkost [%]\r");
 
                 Graph_selector_1.SelectedIndex = 0;
                 Graph_selector_2.SelectedIndex = 0;
@@ -277,12 +289,46 @@ namespace Rosny_Bod_App
                     Ti_TextBox.Text = Settings.Ti.ToString("G", CultureInfo.CurrentCulture);
                     HBridgeControl.Td = Settings.Td;
                     Td_TextBox.Text = Settings.Td.ToString("G", CultureInfo.CurrentCulture);
+                    isOverTempProtOff = Settings.OverTempProtection;
+                    TemperatureProtectionOFF.IsChecked = isOverTempProtOff;
                 }
                 else
                 {
                     settings_load_success = false;
                     Settings.Generate_Options(); ;
                 }
+
+                listOfNamesLogData.Add("Bezpecnostni bity");
+                listOfNamesLogData.Add("Napeti na fotorezistoru[mV]");
+                listOfNamesLogData.Add("Teplota okoli[°C]");
+                listOfNamesLogData.Add("Tlak venku [HPa]");
+                listOfNamesLogData.Add("Proud [A]");
+                listOfNamesLogData.Add("Teplota Chladice [°C]");
+                listOfNamesLogData.Add("Teplota Zrcadla [°C]");
+                listOfNamesLogData.Add("Hodnota (D)erivacniho zasahu Regulatoru");
+                listOfNamesLogData.Add("Hodnota (I)ntegracniho zasahu Regulatoru");
+                listOfNamesLogData.Add("Hodnota (P)roporcionalniho zasahu Regulatoru");
+                listOfNamesLogData.Add("Celkovy zasah Regulatoru");
+
+                listOfNamesRecord.Add("Datum");
+                listOfNamesRecord.Add("Vnejsi teplota [°C]");
+                listOfNamesRecord.Add("Vnitrni teplota [°C]");
+                listOfNamesRecord.Add("Tlak [hPa]");
+                listOfNamesRecord.Add("Relativni vlhkost [%]");
+
+                switch (DelimeterState)
+                {
+                    case 0:
+                        delimeter = ';';
+                        break;
+                    case 1:
+                        delimeter = ',';
+                        break;
+                    case 2:
+                        delimeter = '\t';
+                        break;
+                }
+
                 /*  WpfPlot1.Plot.AddScatter(Teplota1.XAxisData, Teplota1.YAxisData);
                   WpfPlot1.Plot.XLabel("Vzorky [-]");
                   WpfPlot1.Plot.YLabel("Teplota [°C]");
@@ -311,7 +357,7 @@ namespace Rosny_Bod_App
         {
             if (e.Key == Key.Enter)
             {
-                ReqConfirm_Click(this,new RoutedEventArgs());
+                ReqConfirm_Click(this, new RoutedEventArgs());
             }
         }
 
@@ -322,7 +368,8 @@ namespace Rosny_Bod_App
                 ReqPowConfirm_Click(this, new RoutedEventArgs());
             }
         }
-        private void Password_box_KeyDown(object sender, KeyEventArgs e){
+        private void Password_box_KeyDown(object sender, KeyEventArgs e)
+        {
             if (e.Key == Key.Enter)
             {
                 Password_Confirm_Click(this, new RoutedEventArgs());
@@ -331,6 +378,36 @@ namespace Rosny_Bod_App
 
         private void Connect_to_device_Click(object sender, RoutedEventArgs e)
         {
+            if (!filesInicialized)
+            {
+                filesInicialized = true;
+                string temp1 = null;
+                foreach (var name in listOfNamesLogData)
+                {
+
+                    if (listOfNamesLogData.Last() == name)
+                    {
+                        temp1 = temp1 + '"' + name + '"';
+                        break;
+                    }
+                    temp1 = temp1 + '"' + name + '"' + delimeter;
+                }
+                File_Log.Add_Data(temp1 + "\r");
+                string temp2 = null;
+                foreach (var name in listOfNamesRecord)
+                {
+                    if (listOfNamesRecord.Last() == name)
+                    {
+                        temp2 = temp2 + '"' + name + '"';
+                        break;
+                    }
+                    temp2 = temp2 + '"' + name + '"' + delimeter;
+                }
+                File_Record.Add_Data(temp2 + "\r");
+                // File_Log.Add_Data("Bezpecnostni bity; Napeti na fotorezistoru [mV]; Teplota okoli [°C]; Tlak venku [HPa]; Proud [A]; Teplota Chladice [°C]; Teplota Zrcadla [°C]; Hodnota (D)erivacniho zasahu Regulatoru; Hodnota (I)ntegracniho zasahu Regulatoru; Hodnota (P)roporcionalniho zasahu Regulatoru; Celkovy zasah Regulatoru \r");
+                // File_Record.Add_Data("Datum;Vnejsi teplota [°C];Vnitrni teplota [°C];Tlak [hPa];Relativni vlhkost [%]\r");
+            }
+
             if (!ComPort.SerialLink.IsOpen)
             {
                 ComPort.Init_Port();
@@ -427,22 +504,26 @@ namespace Rosny_Bod_App
                                     AlertTriggered2 = false;
                                 }
                             }
-                            if (Report.CoolerTempSence > 60) //V tento moment už je pravděpodobně Peltierův článek poškozen
+
+                            if (!isOverTempProtOff) //Deaktivace ochrany přehřátí chladiče
                             {
-                                ComPort.SerialComWrite(Heart + "111111;001;001;255");
-                                StopMessurementRequest = true;
-                                AlertTriggered3 = true;
-                                App.Current.Dispatcher.Invoke(() =>
+                                if (Report.CoolerTempSence > 60) //V tento moment už je pravděpodobně Peltierův článek poškozen
                                 {
-                                    Status.Text = "Přehřátí chladiče";
-                                    Status.Background = Brushes.Red;
-                                });
-                            }
-                            else
-                            {
-                                if (AlertTriggered3)
+                                    ComPort.SerialComWrite(Heart + "111111;001;001;255");
+                                    StopMessurementRequest = true;
+                                    AlertTriggered3 = true;
+                                    App.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        Status.Text = "Přehřátí chladiče";
+                                        Status.Background = Brushes.Red;
+                                    });
+                                }
+                                else
                                 {
-                                    AlertTriggered3 = false;
+                                    if (AlertTriggered3)
+                                    {
+                                        AlertTriggered3 = false;
+                                    }
                                 }
                             }
                             #endregion
@@ -567,11 +648,21 @@ namespace Rosny_Bod_App
                             {
                                 if (Logtimer > Refresh_delay)
                                 {
-                                    string data = Report.Safetybit1.ToString(CultureInfo.InvariantCulture) + Report.Safetybit2.ToString(CultureInfo.InvariantCulture) + Report.Safetybit3.ToString(CultureInfo.InvariantCulture) +
-                                    Report.Safetybit4.ToString(CultureInfo.InvariantCulture) + ";" + Report.LightSensorReport_mV.ToString(CultureInfo.InvariantCulture) + ";" + Report.EnvTempReport.ToString(CultureInfo.InvariantCulture) + ";" +
-                                    Report.EnvPressureReport.ToString(CultureInfo.InvariantCulture) + ";" + Report.AmpSence.ToString(CultureInfo.InvariantCulture) + ";" + Report.CoolerTempSence.ToString(CultureInfo.InvariantCulture) + ";" +
-                                    Report.PT100TempSence.ToString(CultureInfo.InvariantCulture) + ";" + HBridgeControl.D.ToString(CultureInfo.InvariantCulture) + ";" + HBridgeControl.I.ToString(CultureInfo.InvariantCulture) + ";" +
-                                    HBridgeControl.P.ToString(CultureInfo.InvariantCulture) + ";" + HBridgeControl.U.ToString(CultureInfo.InvariantCulture) + ";" + "\r";
+                                    string data = '"' + Report.Safetybit1.ToString(CultureInfo.InvariantCulture)
+                                    + Report.Safetybit2.ToString(CultureInfo.InvariantCulture)
+                                    + Report.Safetybit3.ToString(CultureInfo.InvariantCulture)
+                                    + Report.Safetybit4.ToString(CultureInfo.InvariantCulture) + '"'
+                                    + delimeter + '"' + Report.LightSensorReport_mV.ToString(CultureInfo.CurrentCulture) + '"'
+                                    + delimeter + '"' + Report.EnvTempReport.ToString(CultureInfo.CurrentCulture) + '"'
+                                    + delimeter + '"' + Report.EnvPressureReport.ToString(CultureInfo.CurrentCulture) + '"'
+                                    + delimeter + '"' + Report.AmpSence.ToString(CultureInfo.CurrentCulture) + '"'
+                                    + delimeter + '"' + Report.CoolerTempSence.ToString(CultureInfo.CurrentCulture) + '"'
+                                    + delimeter + '"' + Report.PT100TempSence.ToString(CultureInfo.CurrentCulture) + '"'
+                                    + delimeter + '"' + HBridgeControl.D.ToString(CultureInfo.CurrentCulture) + '"'
+                                    + delimeter + '"' + HBridgeControl.I.ToString(CultureInfo.CurrentCulture) + '"'
+                                    + delimeter + '"' + HBridgeControl.P.ToString(CultureInfo.CurrentCulture) + '"'
+                                    + delimeter + '"' + HBridgeControl.U.ToString(CultureInfo.CurrentCulture) + '"'
+                                    + "\r";
                                     File_Log.Add_Data(data);
                                     Logtimer = 0;
                                 }
@@ -734,7 +825,7 @@ namespace Rosny_Bod_App
             }
             else
             {
-                requested= requested.Replace(',', '.');
+                requested = requested.Replace(',', '.');
                 if (double.TryParse(requested, styles, culture, out Number))
                 {
                     if (Number > 1)
@@ -920,8 +1011,11 @@ namespace Rosny_Bod_App
             list.Add("dewpoint");
             list.Add("DEWPOINT");
             list.Add("DEW POINT");
+            list.Add("Dew point");
+            list.Add("Dewpoint");
+            list.Add("Dew Point");
 
-            if (list.Contains(Password_box.Text.ToString().ToUpperInvariant()) )
+            if (list.Contains(Password_box.Text.ToString().ToUpperInvariant()))
             {
                 PasswordOk = true;
                 Password_box.Background = Brushes.Green;
@@ -1155,10 +1249,25 @@ namespace Rosny_Bod_App
         private void Export_list()
         {
             string data = "";
-            File_Record.File_Clear();
+
+            foreach (var name in listOfNamesRecord)
+            {
+                if (listOfNamesRecord.Last() == name)
+                {
+                    data = data + '"' + name + '"' + System.Environment.NewLine;
+                    break;
+                }
+                data = data + '"' + name + '"' + delimeter;
+            }
+
             foreach (var DetectionRecord in Record)
             {
-                data += DetectionRecord.Time.ToString("f", new CultureInfo("en-GB")) + ";" + DetectionRecord.ENV_Temperature.ToString(CultureInfo.InvariantCulture) + ";" + DetectionRecord.PT100_Temperature.ToString(CultureInfo.InvariantCulture) + ";" + DetectionRecord.ENV_Pressure.ToString(CultureInfo.InvariantCulture) + ";" + DetectionRecord.Humidity.ToString(CultureInfo.InvariantCulture) + System.Environment.NewLine;
+                data += '"' + DetectionRecord.Time.ToString("f", new CultureInfo("en-GB")) + '"' + delimeter
+                    + '"' + DetectionRecord.ENV_Temperature.ToString(CultureInfo.CurrentCulture) + '"' + delimeter
+                    + '"' + DetectionRecord.PT100_Temperature.ToString(CultureInfo.CurrentCulture) + '"' + delimeter
+                    + '"' + DetectionRecord.ENV_Pressure.ToString(CultureInfo.CurrentCulture) + '"' + delimeter
+                    + '"' + DetectionRecord.Humidity.ToString(CultureInfo.CurrentCulture) + '"'
+                    + System.Environment.NewLine;
             }
             File_Record.Add_Data(data);
         }
@@ -1472,7 +1581,7 @@ namespace Rosny_Bod_App
                 <ComboBoxItem Content="Proud" />
                 <ComboBoxItem Content="Výkon" />
                 <ComboBoxItem Content="Teplota chladiče" />
-*/
+    */
 
 
         }
@@ -1487,7 +1596,7 @@ namespace Rosny_Bod_App
                 <ComboBoxItem Content="Proud" />
                 <ComboBoxItem Content="Výkon" />
                 <ComboBoxItem Content="Teplota chladiče" />
-*/
+    */
 
 
         }
@@ -1784,15 +1893,15 @@ namespace Rosny_Bod_App
                 App.Current.Dispatcher.Invoke(() =>
                 {
 
-                #region Graph_Update
+                    #region Graph_Update
                     GraphSelect();
                     GraphSelect2();
                     WpfPlot2.Refresh();
                     WpfPlot2.Render();
                     WpfPlot1.Refresh();
                     WpfPlot1.Render();
-                #endregion
-                #region Záznam komunikace 
+                    #endregion
+                    #region Záznam komunikace 
 
                     comm_field.AppendText(Report.LastMessage + '\r');
                     comm_field.AppendText(ComPort.LastMsg + '\r');
@@ -1803,8 +1912,8 @@ namespace Rosny_Bod_App
                         com_updater = 0;
                     }
                     com_updater++;
-                #endregion
-                #region Stoping_States
+                    #endregion
+                    #region Stoping_States
                     if (StopMessurementRequest && MessurementStopStates == 0)
                     {
 
@@ -1824,12 +1933,25 @@ namespace Rosny_Bod_App
                         Auto_Messurement_Start.IsEnabled = true;
                         Manual_Messurement_Start.IsEnabled = true;
                     }
-                #endregion
+                    #endregion
                 });
             }
 
             // Forcing the CommandManager to raise the RequerySuggested event
             CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void TemperatureProtectionOFF_Checked(object sender, RoutedEventArgs e)
+        {
+
+            isOverTempProtOff = true;
+
+
+        }
+
+        private void TemperatureProtectionOFF_Unchecked(object sender, RoutedEventArgs e)
+        {
+            isOverTempProtOff = false;
         }
     }
 }

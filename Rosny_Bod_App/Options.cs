@@ -19,6 +19,7 @@ namespace Rosny_Bod_App
      //Proporcionální konstanta závislá na čase:R0
      //Derivační konstanta závislá na čase:Td
      //Integrační konstanta závislá na čase:Ti
+     //Ochrana proti prehrati:isOverTempProtOff
         public File_COM soubory = new File_COM("Options.cfg", "Settings");
         public readonly string data = @"-COM_adresa:COM1
 Čas poklesu teploty za n ticků (Stav náběhu)-Speed_Const:10
@@ -29,7 +30,8 @@ Náběhový krok změny teploty-Inicialstep:0.3
 Měřící krok změny teploty-Messuringstep:0.05
 Proporcionální konstanta závislá na čase-R0:80
 Derivační konstanta závislá na čase-Td:0.002
-Integrační konstanta závislá na čase-Ti:14";
+Integrační konstanta závislá na čase-Ti:14
+Ochrana proti prehrati-isOverTempProtOff:false";
         public string COM_adresa = "";
         public double Speed_Const = 0;
         public double Speed2_Const = 0;
@@ -40,6 +42,8 @@ Integrační konstanta závislá na čase-Ti:14";
         public double R0 = 0;
         public double Td = 0;
         public double Ti = 0;
+        public bool OverTempProtection = false;
+
         public const string slozka = "Settings";
         public string current_path = Directory.GetCurrentDirectory();
 
@@ -114,8 +118,8 @@ Integrační konstanta závislá na čase-Ti:14";
                 int Countb = 0;
                 int Counta = 0;
                 int Counte = 0;
-                const int Countexpected = 10;
-                string[,] Readdata = new string[2, 11];
+                const int Countexpected = 11;
+                string[,] Readdata = new string[2, 12];
                 int Index = 0;
                 int Indexb = 0;
                 int Indexa = 0;
@@ -157,7 +161,7 @@ Integrační konstanta závislá na čase-Ti:14";
                 {
                     if (!Options_data.Contains("COM_adresa") || !Options_data.Contains("Speed_Const") || !Options_data.Contains("Speed2_Const") || !Options_data.Contains("Low_light_Const") ||
                     !Options_data.Contains("High_light_Const") || !Options_data.Contains("Inicialstep") || !Options_data.Contains("Messuringstep") || !Options_data.Contains("R0") ||
-                    !Options_data.Contains("Td") || !Options_data.Contains("Ti"))
+                    !Options_data.Contains("Td") || !Options_data.Contains("Ti") || !Options_data.Contains("isOverTempProtOff"))
                     {
                         return false;
                     }
@@ -203,6 +207,10 @@ Integrační konstanta závislá na čase-Ti:14";
                         if (Readdata[0, x] == "-Ti:")
                         {
                             Ti = double.Parse(Readdata[1, x], NumberStyles.Float | NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+                        }
+                        if (Readdata[0, x] == "-isOverTempProtOff:")
+                        {
+                            OverTempProtection = bool.Parse(Readdata[1, x]);
                         }
 
                     }

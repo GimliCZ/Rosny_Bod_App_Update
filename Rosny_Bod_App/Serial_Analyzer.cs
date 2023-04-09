@@ -78,7 +78,7 @@ namespace Rosny_Bod_App
                     MessuredMinimumAmperage = float.Parse(Reports[4]);
                 }
                 AmpSence = Mapfloat(float.Parse(Reports[4]), MessuredMinimumAmperage, 1024, 0, 20);
-                CoolerVoltSence = double.Parse(Reports[5]) / 1024 * 5;//
+                CoolerVoltSence = double.Parse(Reports[5], CultureInfo.InvariantCulture) / 1024 * 5;//
                 Amperage[AmperageCounter] = AmpSence; // Proveď průměrování 100 prvků vzorů proudu (eliminace pwm)             
                 if (AmperageCounter > 98)
                 {
@@ -96,7 +96,7 @@ namespace Rosny_Bod_App
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Při konverzi dat došlo k fatalní chybě. Zkontrolujte zařízení!" + ex.Message);
+                MessageBox.Show("Při konverzi dat došlo k fatalní chybě. Zkontrolujte zařízení! " + ex.Message);
             }
             return true;
         }
